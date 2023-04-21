@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="LoadingCell" id="UIU-Gk-HEd">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="UIU-Gk-HEd" id="5UE-Kd-zii">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <stackView opaque="NO" contentMode="scaleToFill" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="SaY-zl-i3h">
+                        <rect key="frame" x="131.5" y="30" width="112.5" height="20"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P5m-CV-BdB">
+                                <rect key="frame" x="0.0" y="0.0" width="67.5" height="20"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" name="systemGrayColor" catalog="System" colorSpace="catalog"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <activityIndicatorView opaque="NO" tag="100" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="f3Z-uF-mjy">
+                                <rect key="frame" x="92.5" y="0.0" width="20" height="20"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="f3Z-uF-mjy" secondAttribute="bottom" id="6GJ-7d-Tdc"/>
+                            <constraint firstItem="P5m-CV-BdB" firstAttribute="leading" secondItem="SaY-zl-i3h" secondAttribute="leading" id="A4v-VF-dcD"/>
+                            <constraint firstItem="f3Z-uF-mjy" firstAttribute="leading" secondItem="P5m-CV-BdB" secondAttribute="trailing" constant="25" id="JTn-7Y-8Ni"/>
+                            <constraint firstAttribute="trailing" secondItem="f3Z-uF-mjy" secondAttribute="trailing" id="a1t-ZI-YQv"/>
+                            <constraint firstItem="P5m-CV-BdB" firstAttribute="top" secondItem="SaY-zl-i3h" secondAttribute="top" id="jjC-QF-KdQ"/>
+                            <constraint firstItem="f3Z-uF-mjy" firstAttribute="top" secondItem="SaY-zl-i3h" secondAttribute="top" id="sKk-B4-N3r"/>
+                            <constraint firstAttribute="bottom" secondItem="P5m-CV-BdB" secondAttribute="bottom" id="xKG-pp-NRd"/>
+                        </constraints>
+                    </stackView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="SaY-zl-i3h" firstAttribute="centerX" secondItem="5UE-Kd-zii" secondAttribute="centerX" id="DmQ-Nw-58G"/>
+                    <constraint firstItem="SaY-zl-i3h" firstAttribute="centerY" secondItem="5UE-Kd-zii" secondAttribute="centerY" id="eZ8-dU-uTD"/>
+                </constraints>
+            </tableViewCellContentView>
+            <point key="canvasLocation" x="128.2608695652174" y="87.723214285714278"/>
+        </tableViewCell>
+    </objects>
+</document>
