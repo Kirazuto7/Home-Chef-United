@@ -8,17 +8,43 @@
 import Foundation
 import UIKit
 
-// Group of Global Helper Functions 
+// Group of Global Helper Functions
+
+// Finds the path to the app's document directory
+let applicationDocumentsDirectory: URL = {
+  let paths = FileManager.default.urls(
+    for: .documentDirectory,
+    in: .userDomainMask)
+  return paths[0]
+}()
+
+let dataSaveFailedNotification = Notification.Name(
+  rawValue: "DataSaveFailedNotification")
+    func fatalCoreDataError(_ error: Error) {
+
+        print("*** Fatal error: \(error)")
+        NotificationCenter.default.post(
+            name: dataSaveFailedNotification,
+            object: nil)
+}
 
 func afterDelay(_ seconds: Double, run: @escaping () -> Void) {
     DispatchQueue.main.asyncAfter(deadline: .now() + seconds, execute: run)
 }
 
-func fatalCoreDataError(_ error: Error) {
+func presentAlert(_ alert: UIAlertController, for viewController: UIViewController) {
+    viewController.present(alert, animated: true)
+    let delay = DispatchTime.now() + 2
+    DispatchQueue.main.asyncAfter(deadline: delay) {
+        alert.dismiss(animated: true)
+    }
+}
+
+/*func fatalCoreDataError(_ error: Error) {
     let dataSaveFailedNotification = Notification.Name("DataSaveFailedNotification")
     print("*** Fatal Error: \(error)")
     NotificationCenter.default.post(name: dataSaveFailedNotification, object: nil)
-}
+}*/
 
 func performURLRequest(with url: URL) -> String? {
     do{
@@ -129,13 +155,12 @@ func getRecipeInstructionSteps(for recipe: Recipe) -> [String] {
     for i in 2...10 {
         instructions = instructions.replacingOccurrences(of: "STEP \(i)", with: "")
     }
-    var steps = [String]()
-    instructions.enumerateSubstrings(in: instructions.startIndex..<instructions.endIndex, options: .bySentences) { substring, substringRange, enclosingRange, stop in
-        steps.append(substring!)
-    }
-    return steps
+    instructions = instructions.replacingOccurrences(of: "\r\n", with: "")
+    return instructions.convertToSentences()
 }
 
 func convertToYoutubeID(for recipe: Recipe) -> String {
+    guard !recipe.youtubeURL!.isEmpty else { return "" }
     return recipe.youtubeURL?.components(separatedBy: "=")[1] ?? ""
 }
+

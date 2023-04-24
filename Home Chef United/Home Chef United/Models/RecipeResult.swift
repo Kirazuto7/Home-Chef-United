@@ -66,7 +66,7 @@ class Recipe: Codable, CustomStringConvertible {
     let measurement20: String?
     
     internal var description: String {
-        return "\nResult - Name: \(name), ID: \(id), ImageURL: \(imageURL), Instructions: \(instructions), \nIngredients: \(ingredient1), \(ingredient2), \(ingredient3), \(ingredient4), \(ingredient5)"
+        return "\nResult - Name: \(String(describing: name)), ID: \(String(describing: id)), ImageURL: \(String(describing:imageURL)), Instructions: \(String(describing: instructions)), \nIngredients: \(String(describing:ingredient1)), \(String(describing: ingredient2)), \(String(describing: ingredient3)), \(String(describing:ingredient4)), \(String(describing: ingredient5))"
     }
     
     enum CodingKeys: String, CodingKey {

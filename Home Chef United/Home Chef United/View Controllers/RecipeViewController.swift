@@ -6,10 +6,11 @@
 //
 
 import UIKit
+import CoreData
 
 class RecipeViewController: UITableViewController {
-    
-    
+   
+    @IBOutlet weak var searchFilterSegmentedControl: UISegmentedControl!
     @IBOutlet weak var searchBarView: UIView!
     @IBOutlet weak var searchBar: UISearchBar!
     var recipesArray = [Recipe]()
@@ -18,15 +19,17 @@ class RecipeViewController: UITableViewController {
     var spinner: UIActivityIndicatorView?
     var recipesDataTask: URLSessionDataTask?
     var selectedIndexPath: IndexPath?
+    var managedObjectContext: NSManagedObjectContext!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Register views for table view cells
         var cellNib = UINib(nibName: TableView.CellIdentifiers.loadingCell, bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifiers.loadingCell)
         cellNib = UINib(nibName: TableView.CellIdentifiers.nothingFoundCell, bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifiers.nothingFoundCell)
+        
+        setupKeyboard()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -34,8 +37,52 @@ class RecipeViewController: UITableViewController {
             let recipeDetailViewController = segue.destination as! RecipeDetailViewController
             let recipe = recipesArray[selectedIndexPath?.row ?? 0]
             recipeDetailViewController.recipe = recipe
+            recipeDetailViewController.managedObjectContext = managedObjectContext
         }
     }
+    
+    func setupKeyboard() {
+        let toolbar = UIToolbar()
+        let doneButton = UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(cancelSearch))
+        toolbar.setItems([doneButton], animated: true)
+        toolbar.sizeToFit()
+        searchBar.inputAccessoryView = toolbar
+    }
+    
+    @objc func cancelSearch() {
+        searchBar.text = ""
+        dismissKeyboard()
+    }
+    
+    // MARK: - Outlet Action
+    
+    
+    @IBAction func indexSelected(_ sender: Any) {
+        tableView.reloadData()
+        if searchFilterSegmentedControl.selectedSegmentIndex == 2 {
+            let rightButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refreshButtonSelected(_:)))
+            navigationItem.setRightBarButton(rightButton, animated: true)
+            searchBar.isHidden = true
+            dismissKeyboard()
+            let searchRecipesURL = randomRecipeURL()
+            searchRecipes(forEndpoint: searchRecipesURL)
+        }
+        else {
+            searchBar.text = ""
+            hasSearched = false
+            isLoading = false
+            recipesArray.removeAll()
+            tableView.reloadData()
+            navigationItem.setRightBarButton(nil, animated: true)
+            searchBar.isHidden = false
+        }
+    }
+    
+    @objc func refreshButtonSelected(_ sender: UIBarButtonItem) {
+        let searchRecipesURL = randomRecipeURL()
+        searchRecipes(forEndpoint: searchRecipesURL)
+    }
+    
     
     // MARK: - HTTP Method(s)
     // Helper function to parse JSON data into a useable format
@@ -43,7 +90,6 @@ class RecipeViewController: UITableViewController {
         do{
             let decoder = JSONDecoder()
             let result = try decoder.decode(Recipes.self, from: data)
-            print(result)
             return result.recipes
         }
         catch {
@@ -53,15 +99,14 @@ class RecipeViewController: UITableViewController {
     }
     
     
-    func searchRecipes() {
+    func searchRecipes(forEndpoint url: URL) {
         recipesDataTask?.cancel()
         hasSearched = true
         isLoading = true
         self.tableView.reloadData() // Show the loading cell
-        let searchRecipesUrl = recipesURL(searchText: searchBar.text!)
-        print(searchRecipesUrl)
+        
         let session = URLSession.shared
-        recipesDataTask = session.dataTask(with: searchRecipesUrl) {
+        recipesDataTask = session.dataTask(with: url) {
             [weak self] data, response, error in
             
             guard taskErrorCheck(response: response, error: error) == true else {
@@ -120,7 +165,7 @@ extension RecipeViewController {
         else if recipesArray.count == 0 && hasSearched{
             return 1
         }
-        else if recipesArray.count > 0 {//&& recipesInfoArray.count > 0 {
+        else if recipesArray.count > 0 {
             return recipesArray.count
         }
         else {
@@ -181,7 +226,12 @@ extension RecipeViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if !searchBar.text!.isEmpty {
             searchBar.resignFirstResponder()
-            searchRecipes()
+            var searchRecipesURL: URL
+            // TODO: - Add User Recipe search
+            if searchFilterSegmentedControl.selectedSegmentIndex == 0 {
+                searchRecipesURL = recipesURL(searchText: searchBar.text!)
+                searchRecipes(forEndpoint: searchRecipesURL)
+            }
         }
     }
 }

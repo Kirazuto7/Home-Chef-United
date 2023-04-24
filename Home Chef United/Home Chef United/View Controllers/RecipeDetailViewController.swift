@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class RecipeDetailViewController: UITableViewController {
     
@@ -21,6 +22,7 @@ class RecipeDetailViewController: UITableViewController {
     var recipe: Recipe?
     var downloadTask: URLSessionDownloadTask?
     var ingredientsCellHeight: CGFloat = 44
+    var managedObjectContext: NSManagedObjectContext!
 
     
     override func viewDidLoad() {
@@ -91,7 +93,46 @@ class RecipeDetailViewController: UITableViewController {
     // MARK: - Outlet Functions
     
     @IBAction func saveToCookbook(_ sender: Any) {
-        // TODO: - Save the recipe to User Core Data to retrieve in cookbook
+        // MARK: - Save the recipe to User Core Data to retrieve in cookbook
+        
+        if let recipe = recipe {
+            let favoriteRecipe = FavoriteRecipe(context: managedObjectContext)
+            let ingredientsMap = getRecipeIngredients(for: recipe) // map where key = #, value = (ingredient, measurement)
+            let instructions = getRecipeInstructionSteps(for: recipe)
+            
+            var ingredients = [String]()
+            var measurements = [String:String]()
+            
+            for (_, value) in ingredientsMap {
+                ingredients.append(value.0)
+                measurements[value.0] = value.1
+            }
+            
+            favoriteRecipe.date = Date()
+            favoriteRecipe.title = recipe.name!
+            favoriteRecipe.instructions = instructions
+            favoriteRecipe.ingredients = ingredients
+            favoriteRecipe.measurements = measurements
+            favoriteRecipe.youtubeURL = recipe.youtubeURL
+            favoriteRecipe.origin = recipe.origin
+            favoriteRecipe.prepTime = 0
+            favoriteRecipe.sectionCategory = "Online Recipes"
+            favoriteRecipe.photoString = recipe.imageURL
+            
+            do {
+                try managedObjectContext.save()
+                afterDelay(0.6) {
+                    self.navigationController?.popViewController(animated: true)
+                }
+            }
+            catch {
+                fatalCoreDataError(error)
+            }
+        }
+        else {
+            let alert = UIAlertController(title: "Save Unsuccessful", message: "Please try to save the recipe again later...", preferredStyle: .alert)
+            presentAlert(alert, for: self)
+        }
     }
     
     @IBAction func watchVideo(_ sender: Any) {

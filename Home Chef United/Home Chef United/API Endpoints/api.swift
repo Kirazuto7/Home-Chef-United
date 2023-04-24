@@ -35,6 +35,10 @@ func recipesURL(searchText: String) -> URL {
     return url
 }
 
+func randomRecipeURL() -> URL {
+    let urlString = "\(recipeBaseURL)random.php"
+    return URL(string: urlString)!
+}
 /*func recipesInfoURL(recipeIDs: [Int]) -> URL {
     let ids = recipeIDs.map{String($0)}.joined(separator: ",")
     let urlString = "\(recipeBaseURL)informationBulk?ids=\(ids)&number=10&apiKey=\(recipeApiKey)"
