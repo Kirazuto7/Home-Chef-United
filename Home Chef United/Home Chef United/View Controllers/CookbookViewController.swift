@@ -124,6 +124,11 @@ class CookbookViewController: UITableViewController {
             let createRecipeVC = segue.destination as! CreateRecipeViewController
             createRecipeVC.managedObjectContext = managedObjectContext
         }
+        else if segue.identifier == "CookbookPagesSegue" {
+            if let recipePagesVC = segue.destination as? CookbookPageViewController, let recipe = sender as? FavoriteRecipe {
+                recipePagesVC.recipe = recipe
+            }
+        }
     }
 
 }
@@ -132,8 +137,10 @@ extension CookbookViewController: RecipeCollectionViewCellDelegate {
     
     func recipeCollectionView(recipeCollectionView: RecipeCollectionViewCell?, index: Int, section: Int, tableViewCell: CookbookTableViewCell) {
         if !deleteMode {
-            print("Tapped")
-            print(section)
+            if let row = tableViewCell.recipeCells {
+                let recipe = row[index]
+                performSegue(withIdentifier: "CookbookPagesSegue", sender: recipe)
+            }
         }
     }
     

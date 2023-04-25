@@ -12,8 +12,8 @@ class RecipeCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var recipeNameLabel: UILabel!
     @IBOutlet weak var recipeImageView: UIImageView!
     let backgroundImage: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "CookbookCover"))
-        imageView.contentMode = .scaleAspectFit
+        let imageView = UIImageView()
+        imageView.backgroundColor = appBackgroundColor
         return imageView
     }()
     
@@ -21,11 +21,10 @@ class RecipeCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        self.recipeNameLabel.textColor = UIColor.white
+        self.recipeNameLabel.textColor = appTextColor
         self.backgroundView = backgroundImage
         self.backgroundView?.clipsToBounds = true
-        self.backgroundView?.layer.cornerRadius = 25
-        self.backgroundView?.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
+        self.backgroundView?.layer.cornerRadius = 20
         self.recipeImageView.layer.cornerRadius = 3
     }
     

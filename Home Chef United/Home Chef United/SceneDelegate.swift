@@ -18,7 +18,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
-        
+        UINavigationBar.appearance().backIndicatorImage = UIImage(systemName: "arrow.backward")?.applyingSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 25, weight: .bold))
+        UINavigationBar.appearance().backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.backward")?.applyingSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 25, weight: .bold))
+        UINavigationBar.appearance().tintColor = UIColor.blue
         let tabBarController = window!.rootViewController as! UITabBarController
         if let viewControllers = tabBarController.viewControllers {
             let recipeNavController = viewControllers[0] as! UINavigationController

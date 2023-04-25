@@ -8,22 +8,64 @@
 import UIKit
 
 class CookbookPageViewController: UIPageViewController {
+    
+    private(set) lazy var orderedViewControllers: [UIViewController] = {
+        return [newPageViewController(forPageNum: 1),
+                newPageViewController(forPageNum: 2),
+                newPageViewController(forPageNum: 3)]
+    }()
+    
+    var recipe: FavoriteRecipe!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        dataSource = self
+        
+        if let firstViewController = orderedViewControllers.first {
+            setViewControllers([firstViewController], direction: .forward, animated: true, completion: nil)
+        }
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    // Pages start from 1
+    private func newPageViewController(forPageNum page: Int) -> UIViewController {
+        switch page {
+        case 1:
+            let firstPageVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "FirstPageViewController") as! FirstPageViewController
+            firstPageVC.recipe = recipe
+            return firstPageVC
+        case 2:
+            let secondPageVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SecondPageViewController") as! SecondPageViewController
+            secondPageVC.recipe = recipe
+            return secondPageVC
+        case 3:
+            let thirdPageVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ThirdPageViewController") as! ThirdPageViewController
+            thirdPageVC.recipe = recipe
+            return thirdPageVC
+        default:
+            print("DEFAULT")
+            return UIViewController()
+        }
     }
-    */
 
+}
+
+extension CookbookPageViewController: UIPageViewControllerDataSource {
+    
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        guard let viewControllerIndex = orderedViewControllers.firstIndex(of: viewController) else { return nil }
+        let previousIndex = viewControllerIndex - 1
+        guard previousIndex >= 0 else { return nil }
+        guard orderedViewControllers.count > previousIndex else { return nil }
+        
+        return orderedViewControllers[previousIndex]
+    }
+    
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        guard let viewControllerIndex = orderedViewControllers.firstIndex(of: viewController) else { return nil }
+        let nextIndex = viewControllerIndex + 1
+        guard nextIndex < orderedViewControllers.count else { return nil }
+        return orderedViewControllers[nextIndex]
+    }
+    
+    
 }

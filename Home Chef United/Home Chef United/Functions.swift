@@ -10,6 +10,9 @@ import UIKit
 
 // Group of Global Helper Functions
 
+let appBackgroundColor = UIColor.init(red: 252/255, green: 247/255, blue: 224/255, alpha: 1)
+let appTextColor = UIColor.init(red: 233/255, green: 135/255, blue: 65/255, alpha: 1)
+
 // Finds the path to the app's document directory
 let applicationDocumentsDirectory: URL = {
   let paths = FileManager.default.urls(
@@ -162,5 +165,15 @@ func getRecipeInstructionSteps(for recipe: Recipe) -> [String] {
 func convertToYoutubeID(for recipe: Recipe) -> String {
     guard !recipe.youtubeURL!.isEmpty else { return "" }
     return recipe.youtubeURL?.components(separatedBy: "=")[1] ?? ""
+}
+
+func setupBackgroundView(for view: UIView, with image: UIImage) {
+    let imageView = UIImageView(frame: view.bounds)
+    imageView.image = image
+    imageView.contentMode = .scaleToFill
+    imageView.clipsToBounds = true
+    imageView.center = view.center
+    view.addSubview(imageView)
+    view.sendSubviewToBack(imageView)
 }
 

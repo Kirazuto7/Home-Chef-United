@@ -12,6 +12,10 @@
 		1724283029F6260100DAB3E1 /* CookbookTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1724282F29F6260100DAB3E1 /* CookbookTableViewCell.xib */; };
 		1724283329F6398400DAB3E1 /* AddExtraRecipeInfoViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1724283129F6398400DAB3E1 /* AddExtraRecipeInfoViewCell.swift */; };
 		1724283429F6398400DAB3E1 /* AddExtraRecipeInfoViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1724283229F6398400DAB3E1 /* AddExtraRecipeInfoViewCell.xib */; };
+		1724283629F716C000DAB3E1 /* FirstPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1724283529F716C000DAB3E1 /* FirstPageViewController.swift */; };
+		1724283829F7492600DAB3E1 /* SecondPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1724283729F7492600DAB3E1 /* SecondPageViewController.swift */; };
+		1724283A29F755F600DAB3E1 /* ThirdPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1724283929F755F600DAB3E1 /* ThirdPageViewController.swift */; };
+		1724283C29F76B2A00DAB3E1 /* CookbookIngredientsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1724283B29F76B2A00DAB3E1 /* CookbookIngredientsCell.swift */; };
 		17460A0229F3034C00A1FBA7 /* CookbookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17460A0129F3034C00A1FBA7 /* CookbookViewController.swift */; };
 		17460A0429F34C6500A1FBA7 /* CookbookTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17460A0329F34C6400A1FBA7 /* CookbookTableViewCell.swift */; };
 		17460A0929F34DDC00A1FBA7 /* RecipeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17460A0729F34DDC00A1FBA7 /* RecipeCollectionViewCell.swift */; };
@@ -51,6 +55,10 @@
 		1724282F29F6260100DAB3E1 /* CookbookTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CookbookTableViewCell.xib; sourceTree = "<group>"; };
 		1724283129F6398400DAB3E1 /* AddExtraRecipeInfoViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExtraRecipeInfoViewCell.swift; sourceTree = "<group>"; };
 		1724283229F6398400DAB3E1 /* AddExtraRecipeInfoViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddExtraRecipeInfoViewCell.xib; sourceTree = "<group>"; };
+		1724283529F716C000DAB3E1 /* FirstPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstPageViewController.swift; sourceTree = "<group>"; };
+		1724283729F7492600DAB3E1 /* SecondPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondPageViewController.swift; sourceTree = "<group>"; };
+		1724283929F755F600DAB3E1 /* ThirdPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdPageViewController.swift; sourceTree = "<group>"; };
+		1724283B29F76B2A00DAB3E1 /* CookbookIngredientsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookbookIngredientsCell.swift; sourceTree = "<group>"; };
 		17460A0129F3034C00A1FBA7 /* CookbookViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookbookViewController.swift; sourceTree = "<group>"; };
 		17460A0329F34C6400A1FBA7 /* CookbookTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookbookTableViewCell.swift; sourceTree = "<group>"; };
 		17460A0729F34DDC00A1FBA7 /* RecipeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -101,6 +109,10 @@
 			isa = PBXGroup;
 			children = (
 				17460A1029F40F5100A1FBA7 /* CookbookPageViewController.swift */,
+				1724283529F716C000DAB3E1 /* FirstPageViewController.swift */,
+				1724283729F7492600DAB3E1 /* SecondPageViewController.swift */,
+				1724283929F755F600DAB3E1 /* ThirdPageViewController.swift */,
+				1724283B29F76B2A00DAB3E1 /* CookbookIngredientsCell.swift */,
 			);
 			path = "Cookbook Pages View Controllers";
 			sourceTree = "<group>";
@@ -287,6 +299,7 @@
 				17460A2A29F5053600A1FBA7 /* UIViewController+Keyboard.swift in Sources */,
 				17B177D129EDA1CB00E3C4D1 /* RecipeResult.swift in Sources */,
 				17B177C729ED940200E3C4D1 /* UIImageView+DownloadImage.swift in Sources */,
+				1724283A29F755F600DAB3E1 /* ThirdPageViewController.swift in Sources */,
 				17460A2129F430AA00A1FBA7 /* AddRecipeFirstSectionViewCell.swift in Sources */,
 				1724282D29F6220C00DAB3E1 /* FavoriteRecipe+CoreDataClass.swift in Sources */,
 				17B177D729EE01BD00E3C4D1 /* RecipeCell.swift in Sources */,
@@ -296,6 +309,7 @@
 				17B177CB29ED989C00E3C4D1 /* UserRecipeCell.swift in Sources */,
 				177DA05F29EB2B38007F35F5 /* AppDelegate.swift in Sources */,
 				177DA06129EB2B38007F35F5 /* SceneDelegate.swift in Sources */,
+				1724283C29F76B2A00DAB3E1 /* CookbookIngredientsCell.swift in Sources */,
 				1724283329F6398400DAB3E1 /* AddExtraRecipeInfoViewCell.swift in Sources */,
 				177DA07629EB2EA3007F35F5 /* TabBarViewController.swift in Sources */,
 				1724282E29F6220C00DAB3E1 /* FavoriteRecipe+CoreDataProperties.swift in Sources */,
@@ -305,9 +319,11 @@
 				17460A0929F34DDC00A1FBA7 /* RecipeCollectionViewCell.swift in Sources */,
 				17460A1629F4144000A1FBA7 /* CreateRecipeViewController.swift in Sources */,
 				17B177DD29F0D58A00E3C4D1 /* RecipeDetailViewController.swift in Sources */,
+				1724283829F7492600DAB3E1 /* SecondPageViewController.swift in Sources */,
 				17460A2C29F50C4200A1FBA7 /* String+Sentences.swift in Sources */,
 				17460A1129F40F5100A1FBA7 /* CookbookPageViewController.swift in Sources */,
 				177DA06929EB2B38007F35F5 /* Home_Chef_United.xcdatamodeld in Sources */,
+				1724283629F716C000DAB3E1 /* FirstPageViewController.swift in Sources */,
 				17460A1B29F41CB700A1FBA7 /* AddIngredientsViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

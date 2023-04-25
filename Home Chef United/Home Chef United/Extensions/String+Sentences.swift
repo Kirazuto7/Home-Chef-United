@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 extension String {
     
@@ -31,4 +32,5 @@ extension String {
         newText.popLast()
         return newText
     }
+
 }
