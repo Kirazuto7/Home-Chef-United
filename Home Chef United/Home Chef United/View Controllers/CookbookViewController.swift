@@ -64,7 +64,7 @@ class CookbookViewController: UITableViewController {
         }
         else {
             deleteButton.image = UIImage(systemName: "trash.slash")
-            deleteButton.tintColor = UIColor.blue
+            deleteButton.tintColor = appTextColor
             presentAlert(alertDeactivated, for: self)
         }
     }

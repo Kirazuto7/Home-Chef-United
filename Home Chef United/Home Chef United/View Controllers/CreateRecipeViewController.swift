@@ -173,6 +173,9 @@ class CreateRecipeViewController: UITableViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    // TODO: - Create an action sheet when the user saves to either save locally or publish the recipe & save
+    //        section category will be saved as Other User Recipes in firebase db and as My Recipes in Core Data
+    
 
     // MARK: - Table view data source
 

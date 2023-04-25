@@ -38,6 +38,7 @@ class RecipeViewController: UITableViewController {
             let recipe = recipesArray[selectedIndexPath?.row ?? 0]
             recipeDetailViewController.recipe = recipe
             recipeDetailViewController.managedObjectContext = managedObjectContext
+            navigationItem.backButtonTitle = ""
         }
     }
     

@@ -11,10 +11,15 @@ class TabBarViewController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        adjustStatusBarColor()
     }
     
+    func adjustStatusBarColor() {
+        let statusBarFrame = view.window?.windowScene?.statusBarManager?.statusBarFrame ?? UIApplication.shared.statusBarFrame
+        let statusBarView = UIView(frame: statusBarFrame)
+        statusBarView.backgroundColor = appBackgroundColor
+        view.addSubview(statusBarView)
+    }
 
     /*
     // MARK: - Navigation

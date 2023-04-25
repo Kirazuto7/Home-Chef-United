@@ -20,7 +20,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let _ = (scene as? UIWindowScene) else { return }
         UINavigationBar.appearance().backIndicatorImage = UIImage(systemName: "arrow.backward")?.applyingSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 25, weight: .bold))
         UINavigationBar.appearance().backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.backward")?.applyingSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 25, weight: .bold))
-        UINavigationBar.appearance().tintColor = UIColor.blue
+        UINavigationBar.appearance().tintColor = appTextColor
+        UINavigationBar.appearance().backgroundColor = appBackgroundColor
+        
+        /*let statusBarFrame = (window?.windowScene?.statusBarManager?.statusBarFrame)!
+        let statusBarView = UIView(frame: statusBarFrame)
+        statusBarView.backgroundColor = appBackgroundColor
+        view.addSubview(statusBarView)*/
+        
         let tabBarController = window!.rootViewController as! UITabBarController
         if let viewControllers = tabBarController.viewControllers {
             let recipeNavController = viewControllers[0] as! UINavigationController
