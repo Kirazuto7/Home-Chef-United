@@ -14,14 +14,24 @@ class CreateRecipeViewController: UITableViewController {
     var ingredientsIndexPaths = [IndexPath]()
     var ingredientsMap = [Int:(String, String)]() // Key = Ingredient #, Value = Ingredient, Measurement
     var managedObjectContext: NSManagedObjectContext!
+    var recipeToEdit: FavoriteRecipe?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        if let recipeToEdit = recipeToEdit {
+            title = "Edit Recipe"
+            
+            
+            let ingredientsNum = recipeToEdit.ingredients.count
+            print("\(ingredientsNum) djniqndnjkdjn 2jkdn2j3")
+            var newRowIndex = 1
+            while newRowIndex < ingredientsNum {
+                ingredientsIndexPaths.append(IndexPath(row: newRowIndex, section: 1))
+                newRowIndex += 1
+            }
+        }
+        
         initializeCellNibs()
         ingredientsIndexPaths.append(IndexPath(row: 0, section: 1))
     }
@@ -83,8 +93,7 @@ class CreateRecipeViewController: UITableViewController {
             }
             // Guard against measurement fields that have no ingredient
             guard (ingredientMeasurement.1.isEmpty && !ingredientMeasurement.0.isEmpty) ||
-                  (!ingredientMeasurement.0.isEmpty && !ingredientMeasurement.1.isEmpty) ||
-                  (ingredientMeasurement.0.isEmpty && ingredientMeasurement.1.isEmpty) else {
+                  (!ingredientMeasurement.0.isEmpty && !ingredientMeasurement.1.isEmpty)  else {
                 let alert = UIAlertController(title: "Save Failed", message: "Every measurement must have an ingredient associated with it", preferredStyle: .alert)
                 presentAlert(alert, for: self)
                 return
@@ -131,7 +140,17 @@ class CreateRecipeViewController: UITableViewController {
         guard !saveTitle.isEmpty else { return }
         guard !saveInstructions.isEmpty else { return }
         guard !saveIngredients.isEmpty else { return }
-        let myFavoriteRecipe = FavoriteRecipe(context: managedObjectContext)
+        
+        let myFavoriteRecipe: FavoriteRecipe
+        
+        // Determine whether editting an existing recipe or adding a new one
+        if let edit = recipeToEdit {
+            myFavoriteRecipe = edit
+        }
+        else {
+            myFavoriteRecipe = FavoriteRecipe(context: managedObjectContext)
+        }
+        
         myFavoriteRecipe.date = Date()
         myFavoriteRecipe.title = saveTitle
         if !saveYoutubeURLString.isEmpty
@@ -208,6 +227,18 @@ class CreateRecipeViewController: UITableViewController {
             let recipeCell = tableView.dequeueReusableCell(withIdentifier: "AddRecipeCell", for: indexPath) as! AddRecipeFirstSectionViewCell
             recipeCell.delegate = self
             recipeCell.recipeTitleTextField.delegate = self
+            
+            // Edit Mode
+            if let recipeToEdit = recipeToEdit {
+                recipeCell.recipeTitleTextField.text  = recipeToEdit.title
+                
+                if recipeToEdit.hasPhoto, let image = recipeToEdit.photoImage {
+                    recipeCell.isUserInteractionEnabled = true
+                    recipeCell.recipeImageView.image = image
+                    recipeCell.placeholderImageView.isHidden = true
+                }
+            }
+            
             return recipeCell
         }
         if indexPath.section == 1 {
@@ -219,6 +250,31 @@ class CreateRecipeViewController: UITableViewController {
             if indexPath.row == ingredientsIndexPaths.count-1 {
                 ingredientsCell.addButton.isHidden = false
             }
+            
+            if recipeToEdit != nil {
+                if ingredientsIndexPaths.count == 1 {
+                    let ingredient = recipeToEdit?.ingredients[indexPath.row]
+                    ingredientsCell.ingredientTextField.text = ingredient
+                    
+                    if recipeToEdit!.measurements != nil {
+                        if let measurement = recipeToEdit!.measurements![ingredient!] {
+                            ingredientsCell.measurementTextField.text = measurement
+                        }
+                    }
+                }
+                else if indexPath.row != ingredientsIndexPaths.count - 1 {
+                    ingredientsCell.addButton.isHidden = true
+                    let ingredient = recipeToEdit?.ingredients[indexPath.row]
+                    ingredientsCell.ingredientTextField.text = ingredient
+                    
+                    if recipeToEdit!.measurements != nil {
+                        if let measurement = recipeToEdit!.measurements![ingredient!] {
+                            ingredientsCell.measurementTextField.text = measurement
+                        }
+                    }
+                }
+            }
+            
             return ingredientsCell
         }
         if indexPath.section == 2 {
@@ -226,10 +282,33 @@ class CreateRecipeViewController: UITableViewController {
             recipeInstructionsCell.instructionsTextView.delegate = self
             recipeInstructionsCell.layer.borderWidth = 2
             recipeInstructionsCell.layer.borderColor = UIColor.orange.cgColor
+            
+            if let recipeToEdit = recipeToEdit {
+                var recipeText = ""
+                for instruction in recipeToEdit.instructions {
+                    recipeText += instruction + "/n"
+                }
+                // Remove the /n at the end
+                recipeText.popLast()
+                recipeText.popLast()
+                recipeInstructionsCell.instructionsTextView.text = recipeText
+            }
+            
             return recipeInstructionsCell
         }
         if indexPath.section == 3 {
             let extraInfoCell = tableView.dequeueReusableCell(withIdentifier: "AddExtraRecipeInfoViewCell", for: indexPath) as! AddExtraRecipeInfoViewCell
+            
+            if let recipeToEdit = recipeToEdit {
+                if let url = recipeToEdit.youtubeURL {
+                    extraInfoCell.youtubeURLTextField.text = url
+                }
+                
+                if recipeToEdit.prepTime > 0 {
+                    extraInfoCell.prepTimeTextField.text = "\(recipeToEdit.prepTime) minutes"
+                }
+            }
+            
             return extraInfoCell
         }
         return UITableViewCell()

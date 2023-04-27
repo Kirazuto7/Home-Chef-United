@@ -10,6 +10,7 @@ import UIKit
 protocol RecipeCollectionViewCellDelegate: class {
     func recipeCollectionView(recipeCollectionView: RecipeCollectionViewCell?, index: Int, section: Int, tableViewCell: CookbookTableViewCell)
     func removeRecipeFromCollectionView(recipeCollectionView: RecipeCollectionViewCell?, index: Int, section: Int, tableViewCell: CookbookTableViewCell)
+    func editRecipeFromCollectionView(recipeCollectionView: RecipeCollectionViewCell?, index: Int, section: Int, sectionName: String, tableViewCell: CookbookTableViewCell)
 }
 
 class CookbookTableViewCell: UITableViewCell {
@@ -17,6 +18,7 @@ class CookbookTableViewCell: UITableViewCell {
     @IBOutlet weak var recipesCollectionView: UICollectionView!
     var recipeCells: [FavoriteRecipe]?
     var section: Int?
+    var sectionName: String?
     weak var cellDelegate: RecipeCollectionViewCellDelegate?
     
     override func awakeFromNib() {
@@ -25,8 +27,8 @@ class CookbookTableViewCell: UITableViewCell {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
         flowLayout.itemSize = CGSize(width: 150, height: 180)
-        flowLayout.minimumLineSpacing = 2.0
-        flowLayout.minimumInteritemSpacing = 5.0
+        flowLayout.minimumLineSpacing = 16.0
+        flowLayout.minimumInteritemSpacing = 16.0
         self.recipesCollectionView.collectionViewLayout = flowLayout
         self.recipesCollectionView.showsHorizontalScrollIndicator = false
         
@@ -47,8 +49,9 @@ class CookbookTableViewCell: UITableViewCell {
 
 extension CookbookTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    func updateCellWith(row: [FavoriteRecipe], for section: Int) {
+    func updateCellWith(row: [FavoriteRecipe], for section: Int, as sectionName: String) {
         self.section = section
+        self.sectionName = sectionName
         self.recipeCells = row
         self.recipesCollectionView.reloadData()
     }
@@ -79,5 +82,10 @@ extension CookbookTableViewCell: UICollectionViewDelegate, UICollectionViewDataS
         let cell = collectionView.cellForItem(at: indexPath) as? RecipeCollectionViewCell
         self.cellDelegate?.recipeCollectionView(recipeCollectionView: cell, index: indexPath.item, section: section!, tableViewCell: self)
         self.cellDelegate?.removeRecipeFromCollectionView(recipeCollectionView: cell, index: indexPath.item, section: section!, tableViewCell: self)
+        self.cellDelegate?.editRecipeFromCollectionView(recipeCollectionView: cell, index: indexPath.item, section: section!, sectionName: sectionName!, tableViewCell: self)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 150, height: 200)
     }
 }

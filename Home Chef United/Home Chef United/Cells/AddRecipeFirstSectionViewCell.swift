@@ -26,10 +26,12 @@ class AddRecipeFirstSectionViewCell: UITableViewCell {
     }
     
     func setupViews() {
-        let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageGestureTapped(gestureRecognizer:)))
-        tapGesture.numberOfTapsRequired = 1
-        recipeImageView.addGestureRecognizer(tapGesture)
-        placeholderImageView.addGestureRecognizer(tapGesture)
+        let placeHolderTapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageGestureTapped(gestureRecognizer:)))
+        let recipeTapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageGestureTapped(gestureRecognizer:)))
+        placeHolderTapGesture.numberOfTapsRequired = 1
+        recipeTapGesture.numberOfTapsRequired = 1
+        recipeImageView.addGestureRecognizer(recipeTapGesture)
+        placeholderImageView.addGestureRecognizer(placeHolderTapGesture)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

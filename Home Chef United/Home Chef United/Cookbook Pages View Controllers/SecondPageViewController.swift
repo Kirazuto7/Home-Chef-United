@@ -12,7 +12,6 @@ class SecondPageViewController: UIViewController {
     @IBOutlet weak var ingredientsTableView: UITableView!
    
     var recipe: FavoriteRecipe!
-    var ingredientNumber = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +31,7 @@ extension SecondPageViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let ingredientCell = tableView.dequeueReusableCell(withIdentifier: "CookbookIngredientsCell", for: indexPath) as! CookbookIngredientsCell
         let ingredient = recipe.ingredients[indexPath.row]
-        ingredientCell.ingredientNumberLabel.text = "\(ingredientNumber))"
+        ingredientCell.ingredientNumberLabel.text = "\(indexPath.row + 1))"
         ingredientCell.ingredientNameLabel.text = ingredient
         
         if recipe.measurements != nil {
@@ -40,7 +39,6 @@ extension SecondPageViewController: UITableViewDelegate, UITableViewDataSource {
                 ingredientCell.ingredientMeasurementLabel.text = measurement
             }
         }
-        ingredientNumber += 1
         return ingredientCell
     }
     

@@ -176,4 +176,3 @@ func setupBackgroundView(for view: UIView, with image: UIImage) {
     view.addSubview(imageView)
     view.sendSubviewToBack(imageView)
 }
-
