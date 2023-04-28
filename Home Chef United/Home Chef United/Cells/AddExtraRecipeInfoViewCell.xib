@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="AddExtraRecipeInfoViewCell" rowHeight="90" id="KGk-i7-Jjw" customClass="AddExtraRecipeInfoViewCell" customModule="Home_Chef_United" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="90"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="90"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Prep Time:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cYc-sj-Ppl">
+                        <rect key="frame" x="8" y="16" width="104" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="104" id="g4D-ev-Kge"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Youtube URL:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3d0-yU-9Tb">
+                        <rect key="frame" x="8" y="53" width="104" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="104" id="DZo-3T-vOl"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QaQ-ra-7YW">
+                        <rect key="frame" x="120" y="48" width="192" height="34"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
+                    </textField>
+                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Time in Minutes" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="T0j-fH-g6Q">
+                        <rect key="frame" x="120" y="8" width="192" height="34"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                    </textField>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="T0j-fH-g6Q" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="0hH-10-Njn"/>
+                    <constraint firstItem="cYc-sj-Ppl" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="A7k-dy-P6A"/>
+                    <constraint firstItem="cYc-sj-Ppl" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="16" id="Bvk-Xr-f00"/>
+                    <constraint firstItem="QaQ-ra-7YW" firstAttribute="top" relation="greaterThanOrEqual" secondItem="T0j-fH-g6Q" secondAttribute="bottom" constant="4" id="FdK-cV-kAR"/>
+                    <constraint firstAttribute="trailing" secondItem="T0j-fH-g6Q" secondAttribute="trailing" constant="8" id="IPK-O2-MTl"/>
+                    <constraint firstAttribute="bottom" secondItem="3d0-yU-9Tb" secondAttribute="bottom" constant="16" id="ahB-mH-PxG"/>
+                    <constraint firstItem="3d0-yU-9Tb" firstAttribute="top" relation="greaterThanOrEqual" secondItem="cYc-sj-Ppl" secondAttribute="bottom" constant="4" id="djd-VD-3W2"/>
+                    <constraint firstAttribute="trailing" secondItem="QaQ-ra-7YW" secondAttribute="trailing" constant="8" id="kJh-zv-M0p"/>
+                    <constraint firstItem="T0j-fH-g6Q" firstAttribute="leading" secondItem="cYc-sj-Ppl" secondAttribute="trailing" constant="8" id="vNM-yZ-KjW"/>
+                    <constraint firstItem="3d0-yU-9Tb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="vd0-50-yV6"/>
+                    <constraint firstAttribute="bottom" secondItem="QaQ-ra-7YW" secondAttribute="bottom" constant="8" id="ykx-Hu-eqs"/>
+                    <constraint firstItem="QaQ-ra-7YW" firstAttribute="leading" secondItem="3d0-yU-9Tb" secondAttribute="trailing" constant="8" id="z80-uJ-rHX"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="prepTimeTextField" destination="T0j-fH-g6Q" id="hds-6h-0IG"/>
+                <outlet property="youtubeURLTextField" destination="QaQ-ra-7YW" id="Ek1-Dz-oQ2"/>
+            </connections>
+            <point key="canvasLocation" x="131.8840579710145" y="44.866071428571423"/>
+        </tableViewCell>
+    </objects>
+</document>
