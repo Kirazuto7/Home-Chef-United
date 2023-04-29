@@ -89,6 +89,12 @@ class SignupViewController: UIViewController {
             let user = result?.user
             let userID = user?.uid
             
+            let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
+            changeRequest?.displayName = username
+            changeRequest?.commitChanges(completion: { error in
+                print("Error saving username: \(error)")
+            })
+            
             self.db.collection("users").document(userID!).setData([
                 "id": userID,
                 "email": email,

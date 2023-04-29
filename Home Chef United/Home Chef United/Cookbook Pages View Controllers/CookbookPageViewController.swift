@@ -16,7 +16,6 @@ class CookbookPageViewController: UIPageViewController {
     }()
     
     var recipe: FavoriteRecipe!
-    var username: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +32,6 @@ class CookbookPageViewController: UIPageViewController {
         case 1:
             let firstPageVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "FirstPageViewController") as! FirstPageViewController
             firstPageVC.recipe = recipe
-            firstPageVC.username = username
             return firstPageVC
         case 2:
             let secondPageVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SecondPageViewController") as! SecondPageViewController

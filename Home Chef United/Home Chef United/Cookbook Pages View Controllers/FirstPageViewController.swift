@@ -6,11 +6,11 @@
 //
 
 import UIKit
+import FirebaseCore
+import FirebaseAuth
 
 class FirstPageViewController: UIViewController {
     
-    var username: String?
-
     @IBOutlet weak var recipeTitleLabel: UILabel! {
         didSet {
             recipeTitleLabel.text = recipe.title
@@ -36,7 +36,7 @@ class FirstPageViewController: UIViewController {
         didSet {
             switch recipe?.sectionCategory{
             case "My Recipes":
-                sourceLabel.text = "Written By: \(username!)" // Replace with the user's username
+                sourceLabel.text = "Written By: \(Auth.auth().currentUser!.displayName!)" // Replace with the user's username
             case "Online Recipes":
                 sourceLabel.text = "Origin: \((recipe.origin)!)"
             case "Other User Recipes":

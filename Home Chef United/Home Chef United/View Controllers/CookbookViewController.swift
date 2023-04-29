@@ -19,7 +19,6 @@ class CookbookViewController: UITableViewController {
     var editMode = false // User pressed edit button to edit recipes
     var managedObjectContext: NSManagedObjectContext!
     var db: Firestore!
-    var username: String?
     
     lazy var editButton: UIButton =  {
         let editButton = UIButton()
@@ -49,10 +48,6 @@ class CookbookViewController: UITableViewController {
         tableView.register(cellNib, forCellReuseIdentifier: "CookbookTableViewCell")
         
         fetchFavoriteRecipes()
-        
-        getUsername { username in
-            self.username = username
-        }
     }
     
     deinit {
@@ -68,20 +63,6 @@ class CookbookViewController: UITableViewController {
         }
     }
     
-    func getUsername(completion:@escaping (String)-> Void) {
-        let userRef = db.collection("users").document(Auth.auth().currentUser!.uid)
-        userRef.getDocument { document, error in
-            if let document = document, document.exists {
-                //let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
-                let username = document.data()!["username"] as! String
-                completion(username)
-            }
-            else {
-                print("User does not exist")
-                completion("")
-            }
-        }
-    }
     
     // MARK: - Outlet Actions
 
@@ -194,19 +175,13 @@ class CookbookViewController: UITableViewController {
             deleteButton.tintColor = appTextColor
             editButton.tintColor = appTextColor
             
-            if let username = username {
-                let createRecipeVC = segue.destination as! CreateRecipeViewController
-                createRecipeVC.managedObjectContext = self.managedObjectContext
-                createRecipeVC.db = self.db
-                createRecipeVC.username = username
-            }
+            let createRecipeVC = segue.destination as! CreateRecipeViewController
+            createRecipeVC.managedObjectContext = self.managedObjectContext
+            createRecipeVC.db = self.db
         }
         else if segue.identifier == "CookbookPagesSegue" && !editMode {
-            if let username = username {
-                if let recipePagesVC = segue.destination as? CookbookPageViewController, let recipe = sender as? FavoriteRecipe {
-                    recipePagesVC.recipe = recipe
-                    recipePagesVC.username = username
-                }
+            if let recipePagesVC = segue.destination as? CookbookPageViewController, let recipe = sender as? FavoriteRecipe {
+                recipePagesVC.recipe = recipe
             }
         }
         else if segue.identifier == "EditRecipeSegue" && editMode {

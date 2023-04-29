@@ -9,6 +9,7 @@ import UIKit
 import CoreData
 import FirebaseCore
 import FirebaseFirestore
+import FirebaseAuth
 
 class RecipeViewController: UITableViewController {
    
@@ -66,7 +67,7 @@ class RecipeViewController: UITableViewController {
     }
     
     func getUserRecipes(completion:@escaping ([[String:Any]])-> Void) {
-        db.collection("recipes").getDocuments { querySnapshot, error in
+        db.collection("recipes").whereField("author", isNotEqualTo: Auth.auth().currentUser?.displayName!).getDocuments { querySnapshot, error in
             if let error = error {
                 print("Error getting recipes from firestore: \(error)")
                 completion([])

@@ -27,6 +27,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         UINavigationBar.appearance().tintColor = appTextColor
         UINavigationBar.appearance().backgroundColor = appBackgroundColor
         
+        
         // Persist user login if they did not sign out otherwise direct the user to the login screen
         if Auth.auth().currentUser != nil {
             setUpMainView()
