@@ -7,7 +7,10 @@
 
 import UIKit
 import CoreData
-
+import FirebaseCore
+import FirebaseFirestore
+import FirebaseAuth
+import FirebaseStorage
 
 class CreateRecipeViewController: UITableViewController {
     
@@ -15,10 +18,11 @@ class CreateRecipeViewController: UITableViewController {
     var ingredientsMap = [Int:(String, String)]() // Key = Ingredient #, Value = Ingredient, Measurement
     var managedObjectContext: NSManagedObjectContext!
     var recipeToEdit: FavoriteRecipe?
+    var db: Firestore!
+    var username: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         if let recipeToEdit = recipeToEdit {
             title = "Edit Recipe"
             
@@ -55,6 +59,28 @@ class CreateRecipeViewController: UITableViewController {
     
     
     @IBAction func saveRecipe(_ sender: Any) {
+        
+        if recipeToEdit != nil {
+            save(publishRecipe: false)
+        }
+        else {
+            let alert = UIAlertController(title: "Save Recipe", message: "Would you like to publish your recipe to the public or only save your recipe locally?", preferredStyle: .actionSheet)
+            let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+            let saveLocally = UIAlertAction(title: "Local Recipe", style: .destructive) { _ in
+                self.save(publishRecipe: false)
+            }
+            let savePublicly = UIAlertAction(title: "Publish Recipe", style: .destructive) { _ in
+                self.save(publishRecipe: true)
+            }
+            alert.addAction(cancel)
+            alert.addAction(saveLocally)
+            alert.addAction(savePublicly)
+            present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    // Save the recipe publicly
+    private func save(publishRecipe publish: Bool) {
         var saveImage: UIImage?
         var saveTitle: String = ""
         var savePrepTime: Double = 0
@@ -181,6 +207,13 @@ class CreateRecipeViewController: UITableViewController {
         
         do {
             try managedObjectContext.save()
+            
+            // Save the recipe to the database for public user search if true
+            if(publish) {
+                print("Saved publicly")
+                saveRecipeToFireStore(recipeToSave: myFavoriteRecipe)
+            }
+            
             afterDelay(0.6) {
                 self.navigationController?.popViewController(animated: true)
             }
@@ -192,9 +225,35 @@ class CreateRecipeViewController: UITableViewController {
         navigationController?.popViewController(animated: true)
     }
     
-    // TODO: - Create an action sheet when the user saves to either save locally or publish the recipe & save
-    //        section category will be saved as Other User Recipes in firebase db and as My Recipes in Core Data
+    func saveRecipeToFireStore(recipeToSave recipe: FavoriteRecipe) {
+        let recipeRef = db.collection("recipes").document()
+        let storageRef = Storage.storage().reference()
+        let recipePhotoRef = storageRef.child("\(recipeRef.documentID)/recipePhoto.jpg")
+        
+        recipePhotoRef.putFile(from: recipe.photoURL, metadata: nil) { metadata, error in
+            guard let metadata = metadata else {return}
+            
+            recipePhotoRef.downloadURL { url, error in
+                guard let downloadURL = url else {
+                    print(error)
+                    return
+                }
+                
+                recipeRef.setData([
+                    "name": recipe.title,
+                    "date": recipe.date,
+                    "imageURLString": downloadURL.absoluteString,
+                    "ingredients": recipe.ingredients,
+                    "instructions": recipe.instructions,
+                    "measurements": recipe.measurements,
+                    "prepTime": recipe.prepTime,
+                    "youtubeURL": recipe.youtubeURL,
+                    "author": self.username!,
+                ])
+            }
+        }
     
+    }
 
     // MARK: - Table view data source
 

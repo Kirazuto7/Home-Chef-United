@@ -7,6 +7,8 @@
 
 import UIKit
 import CoreData
+import FirebaseCore
+import FirebaseFirestore
 
 class RecipeViewController: UITableViewController {
    
@@ -14,12 +16,14 @@ class RecipeViewController: UITableViewController {
     @IBOutlet weak var searchBarView: UIView!
     @IBOutlet weak var searchBar: UISearchBar!
     var recipesArray = [Recipe]()
+    var userRecipesArray = [[String:Any]]()
     var hasSearched = false
     var isLoading = false
     var spinner: UIActivityIndicatorView?
     var recipesDataTask: URLSessionDataTask?
     var selectedIndexPath: IndexPath?
     var managedObjectContext: NSManagedObjectContext!
+    var db: Firestore!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,8 +39,14 @@ class RecipeViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "RecipeDetailSegue" {
             let recipeDetailViewController = segue.destination as! RecipeDetailViewController
-            let recipe = recipesArray[selectedIndexPath?.row ?? 0]
-            recipeDetailViewController.recipe = recipe
+            if recipesArray.count > 0 {
+                let recipe = recipesArray[selectedIndexPath?.row ?? 0]
+                recipeDetailViewController.recipe = recipe
+            }
+            else if userRecipesArray.count > 0 {
+                let userRecipe = userRecipesArray[selectedIndexPath?.row ?? 0]
+                recipeDetailViewController.userRecipe = userRecipe
+            }
             recipeDetailViewController.managedObjectContext = managedObjectContext
             navigationItem.backButtonTitle = ""
         }
@@ -53,6 +63,22 @@ class RecipeViewController: UITableViewController {
     @objc func cancelSearch() {
         searchBar.text = ""
         dismissKeyboard()
+    }
+    
+    func getUserRecipes(completion:@escaping ([[String:Any]])-> Void) {
+        db.collection("recipes").getDocuments { querySnapshot, error in
+            if let error = error {
+                print("Error getting recipes from firestore: \(error)")
+                completion([])
+            }
+            else {
+                var tempArray = [[String:Any]]()
+                for document in querySnapshot!.documents {
+                    tempArray.append(document.data())
+                }
+                completion(tempArray)
+            }
+        }
     }
     
     // MARK: - Outlet Action
@@ -155,6 +181,7 @@ extension RecipeViewController {
             static let nothingFoundCell = "NothingFoundCell"
             static let loadingCell = "LoadingCell"
             static let recipeCell = "RecipeCell"
+            static let userRecipeCell = "UserRecipeCell"
         }
     }
     
@@ -163,11 +190,14 @@ extension RecipeViewController {
         if isLoading {
             return 1
         }
-        else if recipesArray.count == 0 && hasSearched{
+        else if recipesArray.count == 0 && userRecipesArray.count == 0 && hasSearched{
             return 1
         }
         else if recipesArray.count > 0 {
             return recipesArray.count
+        }
+        else if userRecipesArray.count > 0 {
+            return userRecipesArray.count
         }
         else {
             return 0
@@ -183,18 +213,24 @@ extension RecipeViewController {
             return cell
         }
         else {
-            if recipesArray.count == 0 && hasSearched {
+            if recipesArray.count == 0 && userRecipesArray.count == 0 && hasSearched {
                 return tableView.dequeueReusableCell(withIdentifier: TableView.CellIdentifiers.nothingFoundCell, for: indexPath)
             }
-            else if recipesArray.count > 0 {//&& recipesInfoArray.count > 0 {
+            else if recipesArray.count > 0 && searchFilterSegmentedControl.selectedSegmentIndex == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: TableView.CellIdentifiers.recipeCell, for: indexPath) as! RecipeCell
                 let recipe = recipesArray[indexPath.row]
-                // TO DO: - Determine if recipe is favorited or not from user with api call
-                cell.configure(for: recipe, liked: false)
+               
+                cell.configure(for: recipe)
                 
                 return cell
                 
-            } // end of inner else
+            }
+            else if userRecipesArray.count > 0 && searchFilterSegmentedControl.selectedSegmentIndex == 1 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: TableView.CellIdentifiers.userRecipeCell, for: indexPath) as! UserRecipeCell
+                let recipe = userRecipesArray[indexPath.row]
+                cell.configure(for: recipe)
+                return cell
+            }
             else {
                 let cell = UITableViewCell()
                 cell.isHidden = true
@@ -204,7 +240,7 @@ extension RecipeViewController {
     }
     
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        if recipesArray.count == 0 || isLoading {
+        if (recipesArray.count == 0 && userRecipesArray.count == 0) || isLoading {
             return nil
         }
         else {
@@ -213,9 +249,16 @@ extension RecipeViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let recipeCell = tableView.dequeueReusableCell(withIdentifier: "RecipeCell", for: indexPath)
-        selectedIndexPath = indexPath
-        performSegue(withIdentifier: "RecipeDetailSegue", sender: recipeCell)
+        if recipesArray.count > 0 {
+            let recipeCell = tableView.dequeueReusableCell(withIdentifier: "RecipeCell", for: indexPath)
+            selectedIndexPath = indexPath
+            performSegue(withIdentifier: "RecipeDetailSegue", sender: recipeCell)
+        }
+        else {
+            let userRecipeCell = tableView.dequeueReusableCell(withIdentifier: "UserRecipeCell", for: indexPath)
+            selectedIndexPath = indexPath
+            performSegue(withIdentifier: "RecipeDetailSegue", sender: userRecipeCell)
+        }
     }
     
 }
@@ -228,10 +271,26 @@ extension RecipeViewController: UISearchBarDelegate {
         if !searchBar.text!.isEmpty {
             searchBar.resignFirstResponder()
             var searchRecipesURL: URL
-            // TODO: - Add User Recipe search
             if searchFilterSegmentedControl.selectedSegmentIndex == 0 {
                 searchRecipesURL = recipesURL(searchText: searchBar.text!)
                 searchRecipes(forEndpoint: searchRecipesURL)
+            }
+            else if searchFilterSegmentedControl.selectedSegmentIndex == 1 {
+                isLoading = true
+                hasSearched = true
+                getUserRecipes { data in
+                    self.userRecipesArray = data
+                    self.isLoading = false
+                    self.spinner?.stopAnimating()
+                    self.userRecipesArray = self.userRecipesArray.filter({ recipeDict in
+                        let name = recipeDict["name"] as! String
+                        return name.contains(searchBar.text!)
+                    })
+                    if self.userRecipesArray.count > 0 {
+                        self.hasSearched = false
+                    }
+                    self.tableView.reloadData()
+                }
             }
         }
     }

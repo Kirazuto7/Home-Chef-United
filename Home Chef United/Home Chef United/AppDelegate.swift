@@ -6,13 +6,18 @@
 //
 
 import UIKit
+import FirebaseCore
+import FirebaseFirestore
+import FirebaseAuth
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
         
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        print(applicationDocumentsDirectory)
+        //print(applicationDocumentsDirectory)
+        FirebaseApp.configure()
+        
         return true
     }
 
