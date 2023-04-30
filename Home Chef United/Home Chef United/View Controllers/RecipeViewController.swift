@@ -70,7 +70,7 @@ class RecipeViewController: UITableViewController {
         db.collection("recipes").whereField("author", isNotEqualTo: Auth.auth().currentUser?.displayName!).getDocuments { querySnapshot, error in
             if let error = error {
                 print("Error getting recipes from firestore: \(error)")
-                completion([])
+                //completion([])
             }
             else {
                 var tempArray = [[String:Any]]()
@@ -125,7 +125,6 @@ class RecipeViewController: UITableViewController {
             return []
         }
     }
-    
     
     func searchRecipes(forEndpoint url: URL) {
         recipesDataTask?.cancel()
@@ -217,10 +216,9 @@ extension RecipeViewController {
             if recipesArray.count == 0 && userRecipesArray.count == 0 && hasSearched {
                 return tableView.dequeueReusableCell(withIdentifier: TableView.CellIdentifiers.nothingFoundCell, for: indexPath)
             }
-            else if recipesArray.count > 0 && searchFilterSegmentedControl.selectedSegmentIndex == 0 {
+            else if recipesArray.count > 0 && (searchFilterSegmentedControl.selectedSegmentIndex == 0 || searchFilterSegmentedControl.selectedSegmentIndex == 2) {
                 let cell = tableView.dequeueReusableCell(withIdentifier: TableView.CellIdentifiers.recipeCell, for: indexPath) as! RecipeCell
                 let recipe = recipesArray[indexPath.row]
-               
                 cell.configure(for: recipe)
                 
                 return cell

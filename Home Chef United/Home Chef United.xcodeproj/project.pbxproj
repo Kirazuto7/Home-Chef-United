@@ -50,6 +50,7 @@
 		1724287F29FB696900DAB3E1 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1724287E29FB696800DAB3E1 /* LoginViewController.swift */; };
 		1724288129FB698A00DAB3E1 /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1724288029FB698A00DAB3E1 /* SignupViewController.swift */; };
 		1724288329FC6F2100DAB3E1 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1724288229FC6F2100DAB3E1 /* ProfileViewController.swift */; };
+		1724288729FEAA5D00DAB3E1 /* UITextField+Padding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1724288629FEAA5D00DAB3E1 /* UITextField+Padding.swift */; };
 		17460A0229F3034C00A1FBA7 /* CookbookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17460A0129F3034C00A1FBA7 /* CookbookViewController.swift */; };
 		17460A0429F34C6500A1FBA7 /* CookbookTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17460A0329F34C6400A1FBA7 /* CookbookTableViewCell.swift */; };
 		17460A0929F34DDC00A1FBA7 /* RecipeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17460A0729F34DDC00A1FBA7 /* RecipeCollectionViewCell.swift */; };
@@ -81,6 +82,7 @@
 		17B177D929EE2FF800E3C4D1 /* LoadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 17B177D829EE2FF800E3C4D1 /* LoadingCell.xib */; };
 		17B177DB29EE33AA00E3C4D1 /* NothingFoundCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 17B177DA29EE33AA00E3C4D1 /* NothingFoundCell.xib */; };
 		17B177DD29F0D58A00E3C4D1 /* RecipeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B177DC29F0D58A00E3C4D1 /* RecipeDetailViewController.swift */; };
+		17E5A1E429FED81E0075B3F2 /* UILabel+Padding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E5A1E329FED81E0075B3F2 /* UILabel+Padding.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -101,6 +103,7 @@
 		1724287E29FB696800DAB3E1 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		1724288029FB698A00DAB3E1 /* SignupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = "<group>"; };
 		1724288229FC6F2100DAB3E1 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		1724288629FEAA5D00DAB3E1 /* UITextField+Padding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Padding.swift"; sourceTree = "<group>"; };
 		17460A0129F3034C00A1FBA7 /* CookbookViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookbookViewController.swift; sourceTree = "<group>"; };
 		17460A0329F34C6400A1FBA7 /* CookbookTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookbookTableViewCell.swift; sourceTree = "<group>"; };
 		17460A0729F34DDC00A1FBA7 /* RecipeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -134,6 +137,7 @@
 		17B177D829EE2FF800E3C4D1 /* LoadingCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingCell.xib; sourceTree = "<group>"; };
 		17B177DA29EE33AA00E3C4D1 /* NothingFoundCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NothingFoundCell.xib; sourceTree = "<group>"; };
 		17B177DC29F0D58A00E3C4D1 /* RecipeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailViewController.swift; sourceTree = "<group>"; };
+		17E5A1E329FED81E0075B3F2 /* UILabel+Padding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Padding.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -250,6 +254,8 @@
 				17460A2B29F50C4200A1FBA7 /* String+Sentences.swift */,
 				1724283F29F87A5300DAB3E1 /* Int+TimeConversion.swift */,
 				1724284529F9DA0500DAB3E1 /* UIView+ShakeAnimation.swift */,
+				1724288629FEAA5D00DAB3E1 /* UITextField+Padding.swift */,
+				17E5A1E329FED81E0075B3F2 /* UILabel+Padding.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -424,7 +430,9 @@
 				1724284229F8B08800DAB3E1 /* CookbookInstructionsCell.swift in Sources */,
 				177DA07629EB2EA3007F35F5 /* TabBarViewController.swift in Sources */,
 				1724284029F87A5300DAB3E1 /* Int+TimeConversion.swift in Sources */,
+				1724288729FEAA5D00DAB3E1 /* UITextField+Padding.swift in Sources */,
 				1724282E29F6220C00DAB3E1 /* FavoriteRecipe+CoreDataProperties.swift in Sources */,
+				17E5A1E429FED81E0075B3F2 /* UILabel+Padding.swift in Sources */,
 				17460A2529F4CF6400A1FBA7 /* RecipeInstructionsViewCell.swift in Sources */,
 				17B177D529EDF8C500E3C4D1 /* api.swift in Sources */,
 				1724288129FB698A00DAB3E1 /* SignupViewController.swift in Sources */,

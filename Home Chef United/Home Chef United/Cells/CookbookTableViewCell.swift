@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import FirebaseCore
+import FirebaseAuth
 
 protocol RecipeCollectionViewCellDelegate: class {
     func recipeCollectionView(recipeCollectionView: RecipeCollectionViewCell?, index: Int, section: Int, tableViewCell: CookbookTableViewCell)
@@ -20,6 +22,7 @@ class CookbookTableViewCell: UITableViewCell {
     var section: Int?
     var sectionName: String?
     weak var cellDelegate: RecipeCollectionViewCellDelegate?
+    var user: User? = Auth.auth().currentUser
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -37,6 +40,7 @@ class CookbookTableViewCell: UITableViewCell {
         
         let cellNib = UINib(nibName: "RecipeCollectionViewCell", bundle: nil)
         self.recipesCollectionView.register(cellNib, forCellWithReuseIdentifier: "RecipeCollectionCell")
+        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

@@ -7,6 +7,10 @@
 
 import Foundation
 
+let MOST_RECENT_RECIPE_TITLE_KEY = "MOST_RECENT_RECIPE_TITLE"
+let MOST_RECENT_RECIPE_IMAGE_KEY = "MOST_RECENT_RECIPE_IMAGE"
+let MOST_RECENT_RECIPE_DATE_KEY = "MOST_RECENT_RECIPE_DATE"
+
 // MARK: - Endpoints
 //let recipeBaseURL = "https://api.spoonacular.com/recipes/"
 let recipeBaseURL = "https://www.themealdb.com/api/json/v1/1/"

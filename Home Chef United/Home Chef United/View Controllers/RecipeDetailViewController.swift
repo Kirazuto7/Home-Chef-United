@@ -24,6 +24,7 @@ class RecipeDetailViewController: UITableViewController {
     var downloadTask: URLSessionDownloadTask?
     var ingredientsCellHeight: CGFloat = 44
     var managedObjectContext: NSManagedObjectContext!
+    let defaults = UserDefaults.standard
 
     
     override func viewDidLoad() {
@@ -178,6 +179,9 @@ class RecipeDetailViewController: UITableViewController {
             
             do {
                 try managedObjectContext.save()
+                defaults.set(favoriteRecipe.title, forKey: MOST_RECENT_RECIPE_TITLE_KEY)
+                defaults.set(favoriteRecipe.photoString, forKey: MOST_RECENT_RECIPE_IMAGE_KEY)
+                defaults.set(favoriteRecipe.date, forKey: MOST_RECENT_RECIPE_DATE_KEY)
                 afterDelay(0.6) {
                     self.navigationController?.popViewController(animated: true)
                 }
@@ -185,6 +189,42 @@ class RecipeDetailViewController: UITableViewController {
             catch {
                 fatalCoreDataError(error)
             }
+        }
+        else if let userRecipe = userRecipe {
+            let favoriteRecipe = FavoriteRecipe(context: managedObjectContext)
+            let name = userRecipe["name"] as! String
+            let author = userRecipe["author"] as! String
+            let ingredients = userRecipe["ingredients"] as! [String]
+            let instructions = userRecipe["instructions"] as! [String]
+            let urlString = userRecipe["imageURLString"] as! String
+            
+            favoriteRecipe.date = Date()
+            favoriteRecipe.title = name
+            favoriteRecipe.instructions = instructions
+            favoriteRecipe.ingredients = ingredients
+            favoriteRecipe.prepTime = userRecipe["prepTime"] as? Double ?? 0
+            favoriteRecipe.youtubeURL = userRecipe["youtubeURL"] as? String ?? ""
+            favoriteRecipe.sectionCategory = "Other User Recipes"
+            favoriteRecipe.photoString = urlString
+            favoriteRecipe.author = author
+            
+            if let measurements = userRecipe["measurements"] as? [String:String] {
+                favoriteRecipe.measurements = measurements
+            }
+            
+            do {
+                try managedObjectContext.save()
+                defaults.set(favoriteRecipe.title, forKey: MOST_RECENT_RECIPE_TITLE_KEY)
+                defaults.set(favoriteRecipe.photoString, forKey: MOST_RECENT_RECIPE_IMAGE_KEY)
+                defaults.set(favoriteRecipe.date, forKey: MOST_RECENT_RECIPE_DATE_KEY)
+                afterDelay(0.6) {
+                    self.navigationController?.popViewController(animated: true)
+                }
+            }
+            catch {
+                fatalCoreDataError(error)
+            }
+        
         }
         else {
             let alert = UIAlertController(title: "Save Unsuccessful", message: "Please try to save the recipe again later...", preferredStyle: .alert)

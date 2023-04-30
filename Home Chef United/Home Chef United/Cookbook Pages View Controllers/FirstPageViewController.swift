@@ -40,7 +40,7 @@ class FirstPageViewController: UIViewController {
             case "Online Recipes":
                 sourceLabel.text = "Origin: \((recipe.origin)!)"
             case "Other User Recipes":
-                print("TO DO")
+                sourceLabel.text = "Written By: \(recipe.author!)"
             default:
                 print("UNKNOWN")
             }
