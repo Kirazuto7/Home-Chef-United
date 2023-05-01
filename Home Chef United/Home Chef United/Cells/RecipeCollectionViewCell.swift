@@ -21,7 +21,6 @@ class RecipeCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        self.recipeNameLabel.textColor = appTextColor
         self.backgroundView = backgroundImage
         self.backgroundView?.clipsToBounds = true
         self.backgroundView?.layer.cornerRadius = 20

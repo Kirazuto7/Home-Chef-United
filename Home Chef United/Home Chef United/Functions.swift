@@ -10,7 +10,7 @@ import UIKit
 
 // Group of Global Helper Functions
 
-let appBackgroundColor = UIColor.init(red: 252/255, green: 247/255, blue: 224/255, alpha: 1)
+let appBackgroundColor = UIColor(red: 253/255, green: 179/255, blue: 130/255, alpha: 1)
 let appTextColor = UIColor.init(red: 233/255, green: 135/255, blue: 65/255, alpha: 1)
 
 // Finds the path to the app's document directory
@@ -175,4 +175,22 @@ func setupBackgroundView(for view: UIView, with image: UIImage) {
     imageView.center = view.center
     view.addSubview(imageView)
     view.sendSubviewToBack(imageView)
+}
+
+func setAppBackground(forView view: UIView) {
+    let gradient = CAGradientLayer()
+    let topColor = CGColor(red: 255/255, green: 126/255, blue: 95/255, alpha: 1)
+    let bottomColor = CGColor(red: 254/255, green: 180/255, blue: 123/255, alpha: 1)
+    gradient.frame = view.bounds
+    gradient.locations = [0.0, 1.0]
+    gradient.colors = [topColor, bottomColor]
+    view.layer.insertSublayer(gradient, at: 0)
+}
+
+func gradientImage(fromLayer layer: CALayer) -> UIImage {
+    UIGraphicsBeginImageContext(layer.frame.size)
+    layer.render(in: UIGraphicsGetCurrentContext()!)
+    let image = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+    return image!
 }

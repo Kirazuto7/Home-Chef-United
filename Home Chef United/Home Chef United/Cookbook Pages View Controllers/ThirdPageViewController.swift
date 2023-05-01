@@ -19,6 +19,7 @@ class ThirdPageViewController: UIViewController {
         instructionsTableView.dataSource = self
         setupBackgroundView(for: self.view, with: UIImage(named: "RecipePage")!)
     }
+    
 }
 
 extension ThirdPageViewController: UITableViewDelegate, UITableViewDataSource {
@@ -35,7 +36,7 @@ extension ThirdPageViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return TimerHeaderView()
+        return TimerHeaderView(frame: CGRect(x: 0, y: 0, width: instructionsTableView.frame.size.width, height: 64))
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

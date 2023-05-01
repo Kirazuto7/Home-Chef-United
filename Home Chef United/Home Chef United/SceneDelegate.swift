@@ -7,36 +7,31 @@
 
 import UIKit
 import CoreData
+import FirebaseCore
+import FirebaseFirestore
+import FirebaseAuth
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     lazy var managedObjectContext = persistentContainer.viewContext
+    lazy var db = Firestore.firestore()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
-        UINavigationBar.appearance().backIndicatorImage = UIImage(systemName: "arrow.backward")?.applyingSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 25, weight: .bold))
-        UINavigationBar.appearance().backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.backward")?.applyingSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 25, weight: .bold))
-        UINavigationBar.appearance().tintColor = appTextColor
-        UINavigationBar.appearance().backgroundColor = appBackgroundColor
         
-        /*let statusBarFrame = (window?.windowScene?.statusBarManager?.statusBarFrame)!
-        let statusBarView = UIView(frame: statusBarFrame)
-        statusBarView.backgroundColor = appBackgroundColor
-        view.addSubview(statusBarView)*/
-        
-        let tabBarController = window!.rootViewController as! UITabBarController
-        if let viewControllers = tabBarController.viewControllers {
-            let recipeNavController = viewControllers[0] as! UINavigationController
-            let recipeController = recipeNavController.viewControllers.first as! RecipeViewController
-            recipeController.managedObjectContext = managedObjectContext
-            
-            let cookbookNavController = viewControllers[1] as! UINavigationController
-            let cookbookController = cookbookNavController.viewControllers.first as! CookbookViewController
-            cookbookController.managedObjectContext = managedObjectContext
+        // Persist user login if they did not sign out otherwise direct the user to the login screen
+        if Auth.auth().currentUser != nil {
+            setUpMainView()
+        }
+        else {
+            let loginController = window!.rootViewController as! LoginViewController
+            loginController.managedObjectContext = managedObjectContext
+            loginController.window = window
+            loginController.db = db
         }
         
         listenForFatalCoreDataNotifications()
@@ -101,6 +96,30 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         })
         return container
     }()
+    
+    func setUpMainView() {
+        window?.rootViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "TabBarViewController") as! UITabBarController
+        
+        if let tabBarController = window!.rootViewController as? UITabBarController {
+            if let viewControllers = tabBarController.viewControllers {
+                let recipeNavController = viewControllers[0] as! UINavigationController
+                let recipeController = recipeNavController.viewControllers.first as! RecipeViewController
+                recipeController.managedObjectContext = managedObjectContext
+                recipeController.db = db
+                
+                let cookbookNavController = viewControllers[1] as! UINavigationController
+                let cookbookController = cookbookNavController.viewControllers.first as! CookbookViewController
+                cookbookController.managedObjectContext = managedObjectContext
+                cookbookController.db = db
+                
+                let profileNavController = viewControllers[2] as! UINavigationController
+                let profileController = profileNavController.viewControllers.first as! ProfileViewController
+                profileController.managedObjectContext = managedObjectContext
+                profileController.window = window
+                profileController.db = db
+            }
+        }
+    }
 
     // MARK: - Core Data Saving support
 
@@ -155,6 +174,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             completion: nil)
       }
     }
-
+    
 }
 

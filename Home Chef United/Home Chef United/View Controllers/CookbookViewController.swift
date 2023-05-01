@@ -7,6 +7,9 @@
 
 import UIKit
 import CoreData
+import FirebaseCore
+import FirebaseFirestore
+import FirebaseAuth
 
 class CookbookViewController: UITableViewController {
     
@@ -15,11 +18,14 @@ class CookbookViewController: UITableViewController {
     var deleteMode = false // User pressed delete button to remove recipes
     var editMode = false // User pressed edit button to edit recipes
     var managedObjectContext: NSManagedObjectContext!
+    var db: Firestore!
+    var statusBarView: UIView?
+    
     lazy var editButton: UIButton =  {
         let editButton = UIButton()
         editButton.translatesAutoresizingMaskIntoConstraints =  false
         editButton.setImage(UIImage(systemName: "square.and.pencil"), for: .normal)
-        editButton.tintColor = appTextColor
+        editButton.tintColor = UIColor.link
         return editButton
     }()
     
@@ -45,6 +51,16 @@ class CookbookViewController: UITableViewController {
         fetchFavoriteRecipes()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        title = "My Cookbook"
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        title = ""
+    }
+    
     deinit {
         fetchedFavoriteRecipesController.delegate = nil
     }
@@ -58,6 +74,7 @@ class CookbookViewController: UITableViewController {
         }
     }
     
+    
     // MARK: - Outlet Actions
 
     @IBAction func removeRecipes(_ sender: Any) {
@@ -67,7 +84,7 @@ class CookbookViewController: UITableViewController {
         
         if editMode {
             editMode = false
-            editButton.tintColor = appTextColor
+            editButton.tintColor = UIColor.link
         }
         
         if deleteMode {
@@ -77,7 +94,7 @@ class CookbookViewController: UITableViewController {
         }
         else {
             deleteButton.image = UIImage(systemName: "trash.slash")
-            deleteButton.tintColor = appTextColor
+            deleteButton.tintColor = UIColor.link
             presentAlert(alertDeactivated, for: self)
         }
     }
@@ -89,7 +106,7 @@ class CookbookViewController: UITableViewController {
         if deleteMode {
             deleteMode = false
             deleteButton.image = UIImage(systemName: "trash.slash")
-            deleteButton.tintColor = appTextColor
+            deleteButton.tintColor = UIColor.link
         }
         
         if editMode {
@@ -98,7 +115,7 @@ class CookbookViewController: UITableViewController {
             editButton.tintColor = .red
         }
         else {
-            editButton.tintColor = appTextColor
+            editButton.tintColor = UIColor.link
         }
     }
     
@@ -166,14 +183,17 @@ class CookbookViewController: UITableViewController {
             editMode = false
             deleteMode = false
             deleteButton.image = UIImage(systemName: "trash.slash")
-            deleteButton.tintColor = appTextColor
-            editButton.tintColor = appTextColor
+            deleteButton.tintColor = UIColor.link
+            editButton.tintColor = UIColor.link
+            
             let createRecipeVC = segue.destination as! CreateRecipeViewController
-            createRecipeVC.managedObjectContext = managedObjectContext
+            createRecipeVC.managedObjectContext = self.managedObjectContext
+            createRecipeVC.db = self.db
         }
         else if segue.identifier == "CookbookPagesSegue" && !editMode {
             if let recipePagesVC = segue.destination as? CookbookPageViewController, let recipe = sender as? FavoriteRecipe {
                 recipePagesVC.recipe = recipe
+                recipePagesVC.statusBarView = statusBarView
             }
         }
         else if segue.identifier == "EditRecipeSegue" && editMode {
@@ -183,6 +203,7 @@ class CookbookViewController: UITableViewController {
             }
         }
     }
+    
 
 }
 
