@@ -33,7 +33,7 @@ class SignupViewController: UIViewController {
     }
     
     func setupViews() {
-        signupButton.tintColor = appTextColor
+        signupButton.tintColor = appBackgroundColor
         signupButton.titleLabel?.textColor = appBackgroundColor
         passwordTextField.delegate = self
         usernameTextField.delegate = self

@@ -13,6 +13,7 @@ class CookbookIngredientsCell: UITableViewCell {
     @IBOutlet weak var ingredientNumberLabel: UILabel!
     @IBOutlet weak var ingredientNameLabel: UILabel!
     @IBOutlet weak var ingredientMeasurementLabel: UILabel!
+    @IBOutlet weak var contentStackView: UIStackView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

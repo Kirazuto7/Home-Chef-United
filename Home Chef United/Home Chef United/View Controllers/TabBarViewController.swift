@@ -8,15 +8,22 @@
 import UIKit
 
 class TabBarViewController: UITabBarController {
+    
+    let statusBarView = UIView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         adjustStatusBarColor()
+        tabBar.isTranslucent = false
+        
+        let cookbookNavController = self.viewControllers![1] as! UINavigationController
+        let cookbookVC = cookbookNavController.viewControllers.first as! CookbookViewController
+        cookbookVC.statusBarView = statusBarView
     }
     
     func adjustStatusBarColor() {
         let statusBarFrame = view.window?.windowScene?.statusBarManager?.statusBarFrame ?? UIApplication.shared.statusBarFrame
-        let statusBarView = UIView(frame: statusBarFrame)
+        statusBarView.frame = statusBarFrame
         statusBarView.backgroundColor = appBackgroundColor
         view.addSubview(statusBarView)
     }

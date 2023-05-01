@@ -36,8 +36,7 @@ class LoginViewController: UIViewController {
     
     
     func setupViews() {
-        loginButton.tintColor = appTextColor
-        loginButton.titleLabel?.textColor = appBackgroundColor
+        loginButton.tintColor = appBackgroundColor
         emailTextField.delegate = self
         passwordTextField.delegate = self
         setupBackgroundView(for: self.view, with: UIImage(named: "FoodBackground")!)

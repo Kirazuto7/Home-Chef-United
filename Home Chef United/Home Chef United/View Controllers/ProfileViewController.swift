@@ -35,7 +35,7 @@ class ProfileViewController: UIViewController {
     var editMode: Bool = false
     
     var user: User? = Auth.auth().currentUser
-    
+    var gradient: CAGradientLayer?
     override func viewDidLoad() {
         super.viewDidLoad()
         nameTextField.delegate = self
@@ -55,16 +55,19 @@ class ProfileViewController: UIViewController {
             recipeNameLabel.text = mostRecentRecipeTitle
             recipeDateSavedLabel.text = "Date Saved: \(date)"
             recipeImageView.downloadImage(url: URL(string: mostRecentRecipeImage)!)
+            mostRecentRecipeView.clipsToBounds = true
+            mostRecentRecipeView.layer.cornerRadius = 5
+            setAppBackground(forView: mostRecentRecipeView)
         }
         else {
             mostRecentRecipePlaceholderLabel.isHidden = true
         }
     }
-    
+  
     func setupProfileView() {
         navigationItem.title = "Profile"
-        saveButton.tintColor = appTextColor
-        editButton.tintColor = appTextColor
+        saveButton.tintColor = appBackgroundColor
+        editButton.tintColor = UIColor.link
         mostRecentRecipeView.isHidden = false
         passwordLabel.isHidden = true
         saveButton.isHidden = true
@@ -74,6 +77,8 @@ class ProfileViewController: UIViewController {
         
         nameTextField.borderStyle = .none
         emailTextField.borderStyle = .none
+        nameTextField.textAlignment = .center
+        emailTextField.textAlignment = .center
         
         nameTextField.borderLayerStyle(cgColor: UIColor.clear.cgColor, borderWidth: 0, cornerRadius: 0)
         emailTextField.borderLayerStyle(cgColor: UIColor.clear.cgColor, borderWidth: 0, cornerRadius: 0)
@@ -86,8 +91,8 @@ class ProfileViewController: UIViewController {
     }
     
     func setupEditView() {
-        let textFieldColor: CGColor = (appTextColor).cgColor
-        let textFieldBorderWidth: CGFloat = 1
+        let textFieldColor: CGColor = (appBackgroundColor).cgColor
+        let textFieldBorderWidth: CGFloat = 2
         let textFieldCornerRadius: CGFloat = 17
 
         navigationItem.title = "Edit Profile"
@@ -99,6 +104,9 @@ class ProfileViewController: UIViewController {
         nameTextField.isUserInteractionEnabled = true
         emailTextField.isUserInteractionEnabled = true
         passwordLabel.isUserInteractionEnabled = true
+        
+        nameTextField.textAlignment = .natural
+        emailTextField.textAlignment = .natural
         
         nameTextField.layer.isHidden = false
         emailTextField.layer.isHidden = false

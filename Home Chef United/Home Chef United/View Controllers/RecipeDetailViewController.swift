@@ -182,6 +182,8 @@ class RecipeDetailViewController: UITableViewController {
                 defaults.set(favoriteRecipe.title, forKey: MOST_RECENT_RECIPE_TITLE_KEY)
                 defaults.set(favoriteRecipe.photoString, forKey: MOST_RECENT_RECIPE_IMAGE_KEY)
                 defaults.set(favoriteRecipe.date, forKey: MOST_RECENT_RECIPE_DATE_KEY)
+                let alert = UIAlertController(title: "Successfully Saved!", message: "", preferredStyle: .alert)
+                presentAlert(alert, for: self)
                 afterDelay(0.6) {
                     self.navigationController?.popViewController(animated: true)
                 }
@@ -217,6 +219,8 @@ class RecipeDetailViewController: UITableViewController {
                 defaults.set(favoriteRecipe.title, forKey: MOST_RECENT_RECIPE_TITLE_KEY)
                 defaults.set(favoriteRecipe.photoString, forKey: MOST_RECENT_RECIPE_IMAGE_KEY)
                 defaults.set(favoriteRecipe.date, forKey: MOST_RECENT_RECIPE_DATE_KEY)
+                let alert = UIAlertController(title: "Successfully Saved!", message: "", preferredStyle: .alert)
+                presentAlert(alert, for: self)
                 afterDelay(0.6) {
                     self.navigationController?.popViewController(animated: true)
                 }

@@ -22,11 +22,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
-        UINavigationBar.appearance().backIndicatorImage = UIImage(systemName: "arrow.backward")?.applyingSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 25, weight: .bold))
-        UINavigationBar.appearance().backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.backward")?.applyingSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 25, weight: .bold))
-        UINavigationBar.appearance().tintColor = appTextColor
-        UINavigationBar.appearance().backgroundColor = appBackgroundColor
-        
         
         // Persist user login if they did not sign out otherwise direct the user to the login screen
         if Auth.auth().currentUser != nil {

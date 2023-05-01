@@ -15,9 +15,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        //print(applicationDocumentsDirectory)
         FirebaseApp.configure()
-        
+        setupNavigationBar()
+        UITabBar.appearance().backgroundColor = appBackgroundColor
+        UITabBar.appearance().barTintColor = appBackgroundColor
         return true
     }
 
@@ -33,6 +34,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the user discards a scene session.
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+    }
+    
+    // Helper Methods
+    
+    func setupNavigationBar() {
+        let navigation = UINavigationBar.appearance()
+        navigation.backgroundColor = appBackgroundColor
+        let backImage = UIImage(systemName: "arrow.backward")?.withAlignmentRectInsets(UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)).applyingSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 25, weight: .heavy))
+        navigation.backIndicatorImage = backImage
+        navigation.backIndicatorTransitionMaskImage = backImage
+        navigation.backItem?.title = ""
     }
 }
 

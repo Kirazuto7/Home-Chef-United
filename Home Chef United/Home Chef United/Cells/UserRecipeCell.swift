@@ -13,7 +13,7 @@ class UserRecipeCell : UITableViewCell {
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
     @IBOutlet weak var numIngredientsLabel: UILabel!
-    
+    @IBOutlet weak var cellView: UIView!
     var downloadTask: URLSessionDownloadTask?
     
     func configure(for recipe: [String:Any]) {
@@ -26,7 +26,7 @@ class UserRecipeCell : UITableViewCell {
         authorLabel.text = "Written By: \(author)"
         numIngredientsLabel.text = "# Ingredients: \(ingredients.count)"
         if let cookTime = recipe["prepTime"] as? Int {
-            timeLabel.text = "Cook Time: \(cookTime)"
+            timeLabel.text = "Cook Time: \(cookTime) mins"
         }
         else {
             timeLabel.isHidden = true
@@ -35,6 +35,12 @@ class UserRecipeCell : UITableViewCell {
         if let url = URL(string: urlString) {
             downloadTask = recipeImageView.downloadImage(url: url)
         }
+        recipeImageView.layer.cornerRadius = 10
+        cellView.clipsToBounds = true
+        setAppBackground(forView: cellView)
+        cellView.layer.cornerRadius = 10
+        cellView.layer.borderWidth = 2
+        cellView.layer.borderColor = CGColor(red: 0, green: 0, blue: 0, alpha: 0.1)
     }
     
     override func prepareForReuse() {

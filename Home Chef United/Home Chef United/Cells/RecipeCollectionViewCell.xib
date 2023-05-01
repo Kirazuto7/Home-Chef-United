@@ -16,8 +16,8 @@
                 <rect key="frame" x="0.0" y="0.0" width="215" height="395"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recipe Name" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="grR-7P-tDE">
-                        <rect key="frame" x="0.0" y="8" width="215" height="21"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recipe Name" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="grR-7P-tDE">
+                        <rect key="frame" x="8" y="16" width="199" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="ZGy-th-FJ8"/>
                         </constraints>
@@ -26,19 +26,19 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="square" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="alG-8c-XOc">
-                        <rect key="frame" x="16" y="62" width="183" height="315.5"/>
+                        <rect key="frame" x="16" y="54" width="183" height="323.5"/>
                     </imageView>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="alG-8c-XOc" secondAttribute="bottom" constant="16" id="2bF-4L-F48"/>
-                <constraint firstAttribute="trailing" secondItem="grR-7P-tDE" secondAttribute="trailing" id="8nk-cl-qj6"/>
+                <constraint firstAttribute="trailing" secondItem="grR-7P-tDE" secondAttribute="trailing" constant="8" id="8nk-cl-qj6"/>
                 <constraint firstAttribute="trailing" secondItem="alG-8c-XOc" secondAttribute="trailing" constant="16" id="IyV-m5-TNp"/>
-                <constraint firstItem="grR-7P-tDE" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="N4C-Dk-1ms"/>
-                <constraint firstItem="grR-7P-tDE" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="NTF-zD-2Mv"/>
+                <constraint firstItem="grR-7P-tDE" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="8" id="N4C-Dk-1ms"/>
+                <constraint firstItem="grR-7P-tDE" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="16" id="NTF-zD-2Mv"/>
                 <constraint firstItem="alG-8c-XOc" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="aZl-Cf-5UE"/>
-                <constraint firstItem="alG-8c-XOc" firstAttribute="top" secondItem="grR-7P-tDE" secondAttribute="bottom" constant="32" id="cXc-d6-5ME"/>
+                <constraint firstItem="alG-8c-XOc" firstAttribute="top" secondItem="grR-7P-tDE" secondAttribute="bottom" constant="16" id="cXc-d6-5ME"/>
             </constraints>
             <size key="customSize" width="215" height="395"/>
             <connections>

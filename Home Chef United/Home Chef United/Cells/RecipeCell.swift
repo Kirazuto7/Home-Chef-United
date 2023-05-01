@@ -12,6 +12,7 @@ class RecipeCell : UITableViewCell {
     @IBOutlet weak var recipeImageView: UIImageView!
     @IBOutlet weak var numIngredientsLabel: UILabel!
     @IBOutlet weak var originLabel: UILabel!
+    @IBOutlet weak var cellView: UIView!
     
     var downloadTask: URLSessionDownloadTask?
     
@@ -24,6 +25,11 @@ class RecipeCell : UITableViewCell {
         if let url = URL(string: recipe.imageURL!) {
             downloadTask = recipeImageView.downloadImage(url: url)
         }
+        cellView.clipsToBounds = true
+        setAppBackground(forView: cellView)
+        cellView.layer.cornerRadius = 10
+        cellView.layer.borderWidth = 2
+        cellView.layer.borderColor = CGColor(red: 0, green: 0, blue: 0, alpha: 0.1)
     }
     
     override func prepareForReuse() {
@@ -31,5 +37,6 @@ class RecipeCell : UITableViewCell {
         downloadTask?.cancel()
         downloadTask = nil
     }
+
 }
 

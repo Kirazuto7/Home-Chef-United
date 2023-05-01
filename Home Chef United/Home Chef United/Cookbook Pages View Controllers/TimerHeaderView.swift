@@ -13,7 +13,7 @@ class TimerHeaderView: UIView {
     lazy var timerImageView: UIImageView = {
         let timerImageView = UIImageView()
         timerImageView.image = UIImage(systemName: "alarm")
-        timerImageView.tintColor = appTextColor
+        timerImageView.tintColor = UIColor.link
         timerImageView.isUserInteractionEnabled = true
         timerImageView.translatesAutoresizingMaskIntoConstraints = false
         return timerImageView
@@ -25,7 +25,7 @@ class TimerHeaderView: UIView {
         timerTextField.text = "00:00"
         timerTextField.isUserInteractionEnabled = true
         timerTextField.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
-        timerTextField.textColor = appTextColor
+        timerTextField.textColor = UIColor.link
         timerTextField.borderStyle = .roundedRect
         return timerTextField
     }()
@@ -35,7 +35,7 @@ class TimerHeaderView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.imageView?.contentMode = .scaleAspectFill
         button.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
-        button.tintColor = appTextColor
+        button.tintColor = UIColor.link
         button.isUserInteractionEnabled = true
         return button
     }()
@@ -44,7 +44,7 @@ class TimerHeaderView: UIView {
        let button = UIButton()
         button.setBackgroundImage(UIImage(systemName: "stop.fill"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.tintColor = appTextColor
+        button.tintColor = UIColor.link
         button.isUserInteractionEnabled = true
         return button
     }()
@@ -185,7 +185,7 @@ class TimerHeaderView: UIView {
             timer.invalidate()
             startPauseButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
             isPaused = true
-            timerImageView.tintColor = appTextColor
+            timerImageView.tintColor = UIColor.link
         }
     }
     
@@ -197,8 +197,8 @@ class TimerHeaderView: UIView {
         timerTextField.text = totalTime.secondsToTimeString()
         timerTextField.isUserInteractionEnabled = true
         timerTextField.borderStyle = .roundedRect
-        timerTextField.textColor = appTextColor
-        timerImageView.tintColor = appTextColor
+        timerTextField.textColor = UIColor.link
+        timerImageView.tintColor = UIColor.link
     }
     
     @objc func setTimerTextField() {
@@ -238,10 +238,10 @@ class TimerHeaderView: UIView {
             startPauseButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
             
             afterDelay(4) {
-                self.timerImageView.tintColor = appTextColor
+                self.timerImageView.tintColor = UIColor.link
                 self.timerTextField.borderStyle = .roundedRect
                 self.timerTextField.isUserInteractionEnabled = true
-                self.timerTextField.textColor = appTextColor
+                self.timerTextField.textColor = UIColor.link
             }
         }
     }

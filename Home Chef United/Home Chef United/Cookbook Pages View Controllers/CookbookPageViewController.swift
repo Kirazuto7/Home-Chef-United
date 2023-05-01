@@ -16,16 +16,30 @@ class CookbookPageViewController: UIPageViewController {
     }()
     
     var recipe: FavoriteRecipe!
+    var statusBarView: UIView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         dataSource = self
-        
         if let firstViewController = orderedViewControllers.first {
             setViewControllers([firstViewController], direction: .forward, animated: true, completion: nil)
         }
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        UIApplication.shared.setStatusBarHidden(true, with: .fade)
+        navigationController?.navigationBar.backgroundColor = .clear
+        self.tabBarController?.tabBar.isHidden = true
+        statusBarView?.isHidden = true
+    }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        UIApplication.shared.setStatusBarHidden(false, with: .fade)
+        navigationController?.navigationBar.backgroundColor = appBackgroundColor
+        self.tabBarController?.tabBar.isHidden = false
+        statusBarView?.isHidden = false
+    }
     // Pages start from 1
     private func newPageViewController(forPageNum page: Int) -> UIViewController {
         switch page {

@@ -64,28 +64,7 @@ class FirstPageViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         setupBackgroundView(for: self.view, with: UIImage(named: "RecipeCover")!)
-        
-        /*if recipe.sectionCategory == "My Recipes" {
-            getUsername(completion: { data in
-                self.sourceLabel.text = "Written By: \(data)" // Replace with the user's username
-            })
-        }*/
     }
-    
-    /*func getUsername(completion:@escaping (String)-> Void) {
-        let userRef = db.collection("users").document(Auth.auth().currentUser!.uid)
-        userRef.getDocument { document, error in
-            if let document = document, document.exists {
-                //let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
-                let username = document.data()!["username"] as! String
-                completion(username)
-            }
-            else {
-                print("User does not exist")
-                completion("")
-            }
-        }
-    }*/
     
     /*
     // MARK: - Navigation

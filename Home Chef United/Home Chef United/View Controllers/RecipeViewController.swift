@@ -36,7 +36,7 @@ class RecipeViewController: UITableViewController {
         
         setupKeyboard()
     }
-    
+   
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "RecipeDetailSegue" {
             let recipeDetailViewController = segue.destination as! RecipeDetailViewController
@@ -220,7 +220,6 @@ extension RecipeViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: TableView.CellIdentifiers.recipeCell, for: indexPath) as! RecipeCell
                 let recipe = recipesArray[indexPath.row]
                 cell.configure(for: recipe)
-                
                 return cell
                 
             }
@@ -260,6 +259,9 @@ extension RecipeViewController {
         }
     }
     
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.backgroundColor = UIColor.clear
+    }
 }
 
 // MARK: - Search Bar Delegate
