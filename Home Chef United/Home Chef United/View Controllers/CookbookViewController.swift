@@ -19,7 +19,7 @@ class CookbookViewController: UITableViewController {
     var editMode = false // User pressed edit button to edit recipes
     var managedObjectContext: NSManagedObjectContext!
     var db: Firestore!
-    var statusBarView: UIView?
+    let user = Auth.auth().currentUser
     
     lazy var editButton: UIButton =  {
         let editButton = UIButton()
@@ -30,18 +30,47 @@ class CookbookViewController: UITableViewController {
     }()
     
     lazy var fetchedFavoriteRecipesController: NSFetchedResultsController<FavoriteRecipe> = {
+        guard let userID = Auth.auth().currentUser?.uid else {
+            print("ERROR! User not authenticated.")
+            return NSFetchedResultsController<FavoriteRecipe>()
+        }
+
+        let fetchRequestForMyRecipes = NSFetchRequest<FavoriteRecipe>()
+        let entityForMyRecipes = FavoriteRecipe.entity()
+        fetchRequestForMyRecipes.entity = entityForMyRecipes
+        fetchRequestForMyRecipes.predicate = NSPredicate(format: "(userID == %@ OR userID == nil) AND sectionCategory == %@", userID, "My Recipes")
+        fetchRequestForMyRecipes.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+
+        let fetchRequestForOnlineRecipes = NSFetchRequest<FavoriteRecipe>()
+        let entityForOnlineRecipes = FavoriteRecipe.entity()
+        fetchRequestForOnlineRecipes.entity = entityForOnlineRecipes
+        fetchRequestForOnlineRecipes.predicate = NSPredicate(format: "(userID == %@ OR userID == nil) AND sectionCategory == %@", userID, "Online Recipes")
+        fetchRequestForOnlineRecipes.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+
+        let fetchRequestForOtherUserRecipes = NSFetchRequest<FavoriteRecipe>()
+        let entityForOtherUserRecipes = FavoriteRecipe.entity()
+        fetchRequestForOtherUserRecipes.entity = entityForOtherUserRecipes
+        fetchRequestForOtherUserRecipes.predicate = NSPredicate(format: "(userID == %@ OR userID == nil) AND sectionCategory == %@", userID, "Other User Recipes")
+        fetchRequestForOtherUserRecipes.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+
+        let compoundPredicate = NSCompoundPredicate(type: .or, subpredicates: [
+            fetchRequestForMyRecipes.predicate!,
+            fetchRequestForOnlineRecipes.predicate!,
+            fetchRequestForOtherUserRecipes.predicate!
+        ])
+
         let fetchRequest = NSFetchRequest<FavoriteRecipe>()
         let entity = FavoriteRecipe.entity()
         fetchRequest.entity = entity
-        
-        let sortByCategory = NSSortDescriptor(key: "sectionCategory", ascending: true)
-        let sortByDate = NSSortDescriptor(key: "date", ascending: true)
-        fetchRequest.sortDescriptors = [sortByCategory, sortByDate]
-        
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "sectionCategory", cacheName: "FavoriteRecipes")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sectionCategory", ascending: true), NSSortDescriptor(key: "date", ascending: true)]
+        fetchRequest.predicate = compoundPredicate
+
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext, sectionNameKeyPath: "sectionCategory", cacheName: nil)
         fetchedResultsController.delegate = self
+
         return fetchedResultsController
     }()
+
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -123,7 +152,7 @@ class CookbookViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return fetchedFavoriteRecipesController.sections!.count
+        return fetchedFavoriteRecipesController.sections?.count ?? 0
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -132,14 +161,15 @@ class CookbookViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         // My Recipes, Online Recipes, Other User Recipes
-        let sectionInfo = fetchedFavoriteRecipesController.sections![section]
-        return sectionInfo.name
+        let sectionInfo = fetchedFavoriteRecipesController.sections?[section]
+        return sectionInfo?.name
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CookbookTableViewCell") as! CookbookTableViewCell
         
         if let recipeArray = fetchedFavoriteRecipesController.sections![indexPath.section].objects as? [FavoriteRecipe] {
+           
             cell.updateCellWith(row: recipeArray, for: indexPath.section, as: fetchedFavoriteRecipesController.sections![indexPath.section].name)
          }
         
@@ -159,10 +189,10 @@ class CookbookViewController: UITableViewController {
         categoryLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         categoryLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16).isActive = true
         
-        let sectionInfo = fetchedFavoriteRecipesController.sections![section]
-        categoryLabel.text = sectionInfo.name
+        let sectionInfo = fetchedFavoriteRecipesController.sections?[section]
+        categoryLabel.text = sectionInfo?.name
         
-        if sectionInfo.name == "My Recipes" {
+        if sectionInfo?.name == "My Recipes" {
             headerView.addSubview(editButton)
             editButton.leadingAnchor.constraint(equalTo: categoryLabel.trailingAnchor, constant: 16).isActive = true
             editButton.addTarget(self, action: #selector(editRecipes(_:)), for: .touchUpInside)
@@ -193,7 +223,6 @@ class CookbookViewController: UITableViewController {
         else if segue.identifier == "CookbookPagesSegue" && !editMode {
             if let recipePagesVC = segue.destination as? CookbookPageViewController, let recipe = sender as? FavoriteRecipe {
                 recipePagesVC.recipe = recipe
-                recipePagesVC.statusBarView = statusBarView
             }
         }
         else if segue.identifier == "EditRecipeSegue" && editMode {

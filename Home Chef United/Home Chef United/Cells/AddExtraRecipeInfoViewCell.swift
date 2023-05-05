@@ -15,6 +15,7 @@ class AddExtraRecipeInfoViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        addCancelToTextFields(forTextFields: [prepTimeTextField, youtubeURLTextField])
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

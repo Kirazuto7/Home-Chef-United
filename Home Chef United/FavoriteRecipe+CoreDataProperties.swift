@@ -15,7 +15,8 @@ extension FavoriteRecipe {
     @nonobjc public class func fetchRequest() -> NSFetchRequest<FavoriteRecipe> {
         return NSFetchRequest<FavoriteRecipe>(entityName: "FavoriteRecipe")
     }
-
+    
+    @NSManaged public var userID: String?
     @NSManaged public var date: Date
     @NSManaged public var ingredients: [String]
     @NSManaged public var instructions: [String]

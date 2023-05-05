@@ -33,12 +33,22 @@ class SignupViewController: UIViewController {
     }
     
     func setupViews() {
-        signupButton.tintColor = appBackgroundColor
-        signupButton.titleLabel?.textColor = appBackgroundColor
+        signupButton.tintColor = .orange
         passwordTextField.delegate = self
         usernameTextField.delegate = self
         emailTextField.delegate = self
         setupBackgroundView(for: self.view, with: UIImage(named: "FoodBackground")!)
+        
+        let signupImage = UIImage(systemName: "arrow.right.square")
+        signupButton.setImage(signupImage, for: .normal)
+        signupButton.configuration?.imagePadding = 8
+        signupButton.configuration?.imagePlacement = .trailing
+        signupButton.configuration?.contentInsets.leading = 32
+        signupButton.configuration?.contentInsets.trailing = 32
+        signupButton.configuration?.contentInsets.top = 8
+        signupButton.configuration?.contentInsets.bottom = 8
+        signupButton.layer.cornerRadius = signupButton.frame.size.height / 2
+        signupButton.layer.masksToBounds = true
     }
     
     func setUpMainView() {

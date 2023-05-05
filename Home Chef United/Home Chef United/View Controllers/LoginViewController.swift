@@ -36,10 +36,21 @@ class LoginViewController: UIViewController {
     
     
     func setupViews() {
-        loginButton.tintColor = appBackgroundColor
+        loginButton.tintColor = .orange
         emailTextField.delegate = self
         passwordTextField.delegate = self
         setupBackgroundView(for: self.view, with: UIImage(named: "FoodBackground")!)
+        
+        let loginImage = UIImage(systemName: "arrow.right.square")
+        loginButton.setImage(loginImage, for: .normal)
+        loginButton.configuration?.imagePadding = 8
+        loginButton.configuration?.imagePlacement = .trailing
+        loginButton.configuration?.contentInsets.leading = 32
+        loginButton.configuration?.contentInsets.trailing = 32
+        loginButton.configuration?.contentInsets.top = 8
+        loginButton.configuration?.contentInsets.bottom = 8
+        loginButton.layer.cornerRadius = loginButton.frame.size.height / 2
+        loginButton.layer.masksToBounds = true
     }
     
     func setUpMainView() {

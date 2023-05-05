@@ -12,9 +12,10 @@
         <attribute name="prepTime" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="sectionCategory" attributeType="String"/>
         <attribute name="title" attributeType="String"/>
+        <attribute name="userID" attributeType="String"/>
         <attribute name="youtubeURL" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="FavoriteRecipe" positionX="-54" positionY="-9" width="128" height="209"/>
+        <element name="FavoriteRecipe" positionX="-54" positionY="-9" width="128" height="224"/>
     </elements>
 </model>

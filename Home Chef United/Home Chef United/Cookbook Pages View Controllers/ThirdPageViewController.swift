@@ -10,6 +10,7 @@ import UIKit
 class ThirdPageViewController: UIViewController {
     
     @IBOutlet weak var instructionsTableView: UITableView!
+    @IBOutlet weak var closeButton: UIButton!
     
     var recipe: FavoriteRecipe!
     
@@ -18,6 +19,13 @@ class ThirdPageViewController: UIViewController {
         instructionsTableView.delegate = self
         instructionsTableView.dataSource = self
         setupBackgroundView(for: self.view, with: UIImage(named: "RecipePage")!)
+        let image = UIImage(systemName: "xmark.app.fill")?.applyingSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 30, weight: .bold))?.withRenderingMode(.alwaysTemplate)
+            closeButton.setImage(image, for: .normal)
+    }
+    
+    
+    @IBAction func dismissPage(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
     }
     
 }

@@ -19,6 +19,7 @@ class CreateRecipeViewController: UITableViewController {
     var managedObjectContext: NSManagedObjectContext!
     var recipeToEdit: FavoriteRecipe?
     var db: Firestore!
+    let user = Auth.auth().currentUser
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -176,6 +177,7 @@ class CreateRecipeViewController: UITableViewController {
             myFavoriteRecipe = FavoriteRecipe(context: managedObjectContext)
         }
         
+        myFavoriteRecipe.userID = user?.uid
         myFavoriteRecipe.date = Date()
         myFavoriteRecipe.title = saveTitle
         if !saveYoutubeURLString.isEmpty
@@ -247,7 +249,8 @@ class CreateRecipeViewController: UITableViewController {
                     "measurements": recipe.measurements,
                     "prepTime": recipe.prepTime,
                     "youtubeURL": recipe.youtubeURL,
-                    "author": Auth.auth().currentUser?.displayName!,
+                    "author": self.user?.displayName!,
+                    "authorID": self.user?.uid
                 ])
             }
         }

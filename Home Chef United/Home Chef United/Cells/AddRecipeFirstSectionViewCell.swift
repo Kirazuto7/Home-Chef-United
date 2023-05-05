@@ -32,6 +32,7 @@ class AddRecipeFirstSectionViewCell: UITableViewCell {
         recipeTapGesture.numberOfTapsRequired = 1
         recipeImageView.addGestureRecognizer(recipeTapGesture)
         placeholderImageView.addGestureRecognizer(placeHolderTapGesture)
+        addCancelToTextFields(forTextFields: [recipeTitleTextField])
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
