@@ -15,10 +15,6 @@ class TabBarViewController: UITabBarController {
         super.viewDidLoad()
         adjustStatusBarColor()
         tabBar.isTranslucent = false
-        
-        let cookbookNavController = self.viewControllers![1] as! UINavigationController
-        let cookbookVC = cookbookNavController.viewControllers.first as! CookbookViewController
-        cookbookVC.statusBarView = statusBarView
     }
     
     func adjustStatusBarColor() {

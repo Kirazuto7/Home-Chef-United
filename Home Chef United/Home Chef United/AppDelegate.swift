@@ -14,6 +14,7 @@ import FirebaseAuth
 class AppDelegate: UIResponder, UIApplicationDelegate {
         
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        print(applicationDocumentsDirectory)
         // Override point for customization after application launch.
         FirebaseApp.configure()
         setupNavigationBar()
@@ -41,7 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func setupNavigationBar() {
         let navigation = UINavigationBar.appearance()
         navigation.backgroundColor = appBackgroundColor
-        let backImage = UIImage(systemName: "arrow.backward")?.withAlignmentRectInsets(UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)).applyingSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 25, weight: .heavy))
+        let backImage = UIImage(systemName: "arrow.backward")?.applyingSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 20, weight: .heavy))
         navigation.backIndicatorImage = backImage
         navigation.backIndicatorTransitionMaskImage = backImage
         navigation.backItem?.title = ""

@@ -26,6 +26,7 @@ class AddIngredientsViewCell: UITableViewCell {
         // Initialization code
         ingredientTextField.delegate = self
         measurementTextField.delegate = self
+        addCancelToTextFields(forTextFields: [ingredientTextField, measurementTextField])
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

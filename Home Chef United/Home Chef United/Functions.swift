@@ -194,3 +194,20 @@ func gradientImage(fromLayer layer: CALayer) -> UIImage {
     UIGraphicsEndImageContext()
     return image!
 }
+
+func addCancelToTextFields(forTextFields textFields: [UITextField]) {
+    
+    for textField in textFields {
+        let toolBar = UIToolbar()
+        toolBar.barStyle = UIBarStyle.default
+        toolBar.isTranslucent = true
+        toolBar.sizeToFit()
+        let cancel = UIBarButtonItem(systemItem: .cancel, primaryAction: UIAction(handler: { _ in
+            textField.resignFirstResponder()
+        }), menu: nil)
+        toolBar.setItems([cancel], animated: true)
+        textField.inputAccessoryView = toolBar
+    }
+}
+
+

@@ -23,7 +23,7 @@
                             <constraint firstAttribute="width" constant="130" id="BUq-Oa-x6f"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <textInputTraits key="textInputTraits"/>
+                        <textInputTraits key="textInputTraits" returnKeyType="done"/>
                     </textField>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m7v-0d-mYc">
                         <rect key="frame" x="254" y="7" width="30" height="30"/>
@@ -56,7 +56,7 @@
                             <constraint firstAttribute="width" constant="110" id="HqK-19-FWE"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <textInputTraits key="textInputTraits"/>
+                        <textInputTraits key="textInputTraits" returnKeyType="done"/>
                     </textField>
                 </subviews>
                 <constraints>

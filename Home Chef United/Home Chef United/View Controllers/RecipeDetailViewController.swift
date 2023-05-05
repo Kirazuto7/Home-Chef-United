@@ -7,6 +7,8 @@
 
 import UIKit
 import CoreData
+import FirebaseCore
+import FirebaseAuth
 
 class RecipeDetailViewController: UITableViewController {
     
@@ -25,7 +27,7 @@ class RecipeDetailViewController: UITableViewController {
     var ingredientsCellHeight: CGFloat = 44
     var managedObjectContext: NSManagedObjectContext!
     let defaults = UserDefaults.standard
-
+    let user = Auth.auth().currentUser
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -176,6 +178,7 @@ class RecipeDetailViewController: UITableViewController {
             favoriteRecipe.prepTime = 0
             favoriteRecipe.sectionCategory = "Online Recipes"
             favoriteRecipe.photoString = recipe.imageURL
+            favoriteRecipe.userID = user?.uid
             
             do {
                 try managedObjectContext.save()
@@ -209,6 +212,7 @@ class RecipeDetailViewController: UITableViewController {
             favoriteRecipe.sectionCategory = "Other User Recipes"
             favoriteRecipe.photoString = urlString
             favoriteRecipe.author = author
+            favoriteRecipe.userID = user?.uid
             
             if let measurements = userRecipe["measurements"] as? [String:String] {
                 favoriteRecipe.measurements = measurements

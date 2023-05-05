@@ -216,9 +216,13 @@ class ProfileViewController: UIViewController {
         let cancel = UIAlertAction(title: "Cancel", style: .cancel)
         alert.addTextField { textField in
             textField.placeholder = "Enter your current password"
+            textField.isSecureTextEntry = true
+            textField.textContentType = .password
         }
         alert.addTextField { textField in
             textField.placeholder = "Enter your new password"
+            textField.isSecureTextEntry = true
+            textField.textContentType = .newPassword
         }
         let ok = UIAlertAction(title: "Ok", style: .default) { [weak alert] (_) in
             let currentPasswordTextField = alert?.textFields![0]

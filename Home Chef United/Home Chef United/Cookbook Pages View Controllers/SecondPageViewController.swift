@@ -9,6 +9,8 @@ import UIKit
 
 class SecondPageViewController: UIViewController {
     
+    @IBOutlet weak var closeButton: UIButton!
+    
     @IBOutlet weak var ingredientsTableView: UITableView!
    
     var recipe: FavoriteRecipe!
@@ -18,8 +20,14 @@ class SecondPageViewController: UIViewController {
         ingredientsTableView.delegate = self
         ingredientsTableView.dataSource = self
         setupBackgroundView(for: self.view, with: UIImage(named: "RecipePage")!)
+        let image = UIImage(systemName: "xmark.app.fill")?.applyingSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 30, weight: .bold))?.withRenderingMode(.alwaysTemplate)
+            closeButton.setImage(image, for: .normal)
     }
-
+    
+    @IBAction func dismissPage(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
 }
 
 extension SecondPageViewController: UITableViewDelegate, UITableViewDataSource {
