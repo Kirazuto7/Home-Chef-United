@@ -229,7 +229,6 @@ class TimerHeaderView: UIView {
             timerTextField.textColor = .red
         }
         
-        //TODO: - Add vibration/haptic feedback to the user when the timer runs out
         // Reset when timer is up
         if totalTime == 0 {
             timerImageView.shakeAnimation(durationOf: 0.07, repeatNumTimes: 20)

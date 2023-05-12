@@ -10,6 +10,7 @@ import UIKit
 
 extension UIView {
     
+    // SOURCE: - https://stackoverflow.com/questions/27987048/shake-animation-for-uitextfield-uiview-in-swift
     func shakeAnimation(durationOf duration: Double, repeatNumTimes repeatCount: Float) {
         let animation = CABasicAnimation(keyPath: "position")
         animation.duration = duration

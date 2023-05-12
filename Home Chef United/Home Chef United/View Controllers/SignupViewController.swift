@@ -10,6 +10,7 @@ import CoreData
 import FirebaseCore
 import FirebaseFirestore
 import FirebaseAuth
+import FirebaseStorage
 
 class SignupViewController: UIViewController {
 
@@ -98,12 +99,28 @@ class SignupViewController: UIViewController {
         Auth.auth().createUser(withEmail: email, password: password) { result, error in
             let user = result?.user
             let userID = user?.uid
+            let storageRef = Storage.storage().reference()
+            let profilePhotoRef = storageRef.child("\(user!.uid)/profilePhoto.jpg")
             
             let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
             changeRequest?.displayName = username
             changeRequest?.commitChanges(completion: { error in
                 print("Error saving username: \(error)")
             })
+            
+            if let data = UIImage(named: "testavatar")?.jpegData(compressionQuality: 0.5) {
+                let uploadTask = profilePhotoRef.putData(data, metadata: nil) { (metadata, error) in
+                  
+                    if error != nil {
+                        print("Error saving profile photo: \(error)")
+                    }
+                    
+                  guard let metadata = metadata else {
+                    return
+                  }
+                  let size = metadata.size
+                }
+            }
             
             self.db.collection("users").document(userID!).setData([
                 "id": userID,

@@ -43,12 +43,6 @@ func presentAlert(_ alert: UIAlertController, for viewController: UIViewControll
     }
 }
 
-/*func fatalCoreDataError(_ error: Error) {
-    let dataSaveFailedNotification = Notification.Name("DataSaveFailedNotification")
-    print("*** Fatal Error: \(error)")
-    NotificationCenter.default.post(name: dataSaveFailedNotification, object: nil)
-}*/
-
 func performURLRequest(with url: URL) -> String? {
     do{
         return try String(contentsOf: url, encoding: .utf8)
@@ -177,6 +171,7 @@ func setupBackgroundView(for view: UIView, with image: UIImage) {
     view.sendSubviewToBack(imageView)
 }
 
+// SOURCE: - https://stackoverflow.com/questions/24380535/how-to-apply-gradient-to-background-view-of-ios-swift-app
 func setAppBackground(forView view: UIView) {
     let gradient = CAGradientLayer()
     let topColor = CGColor(red: 255/255, green: 126/255, blue: 95/255, alpha: 1)
@@ -187,6 +182,7 @@ func setAppBackground(forView view: UIView) {
     view.layer.insertSublayer(gradient, at: 0)
 }
 
+// SOURCE: - https://stackoverflow.com/questions/3454356/uiimage-from-calayer-in-ios
 func gradientImage(fromLayer layer: CALayer) -> UIImage {
     UIGraphicsBeginImageContext(layer.frame.size)
     layer.render(in: UIGraphicsGetCurrentContext()!)

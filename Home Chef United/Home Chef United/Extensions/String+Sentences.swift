@@ -10,6 +10,7 @@ import UIKit
 
 extension String {
     
+    // SOURCE: - https://stackoverflow.com/questions/29904253/swift-split-string-into-sentences
     // Breaks a passed in string of text into sentences
     func convertToSentences() -> [String] {
         var steps = [String]()
