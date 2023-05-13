@@ -40,6 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Helper Methods
     
     func setupNavigationBar() {
+        // SOURCE: - https://stackoverflow.com/questions/24687238/changing-navigation-bar-color-in-swift
         let navigation = UINavigationBar.appearance()
         navigation.backgroundColor = appBackgroundColor
         let backImage = UIImage(systemName: "arrow.backward")?.applyingSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 20, weight: .heavy))

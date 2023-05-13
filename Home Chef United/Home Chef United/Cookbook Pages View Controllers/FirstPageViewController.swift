@@ -8,8 +8,49 @@
 import UIKit
 import FirebaseCore
 import FirebaseAuth
+import FirebaseStorage
 
 class FirstPageViewController: UIViewController {
+    
+    
+    @IBOutlet weak var authorPhotoImageView: UIImageView! {
+        didSet {
+            switch recipe?.sectionCategory{
+            case "My Recipes":
+                let storageRef = Storage.storage().reference()
+                let profilePhotoRef = storageRef.child("\(Auth.auth().currentUser!.uid)/profilePhoto.jpg")
+                
+                profilePhotoRef.downloadURL { url, error in
+                    if let error = error {
+                        print("Error: \(error)")
+                    }
+                    else {
+                        self.authorPhotoImageView.layer.cornerRadius =  self.authorPhotoImageView.layer.bounds.size.width / 2
+                        self.authorPhotoImageView.layer.borderWidth = 1
+                        self.authorPhotoImageView.downloadImage(url: url!)
+                    }
+                }
+            case "Online Recipes":
+                authorPhotoImageView.isHidden = true
+            case "Other User Recipes":
+                let storageRef = Storage.storage().reference()
+                let profilePhotoRef = storageRef.child("\(recipe.authorID!)/profilePhoto.jpg")
+                
+                profilePhotoRef.downloadURL { url, error in
+                    if let error = error {
+                        print("Error: \(error)")
+                    }
+                    else {
+                        self.authorPhotoImageView.layer.cornerRadius =  self.authorPhotoImageView.layer.bounds.size.width / 2
+                        self.authorPhotoImageView.layer.borderWidth = 1
+                        self.authorPhotoImageView.downloadImage(url: url!)
+                    }
+                }
+            default:
+                print("UNKNOWN")
+            }
+        }
+    }
     
     @IBOutlet weak var closeButton: UIButton!
     

@@ -105,7 +105,7 @@ class CreateRecipeViewController: UITableViewController {
             saveTitle = cell.recipeTitleTextField.text!
             saveImage = cell.recipeImageView.image!
         }
-        
+        print(ingredientsIndexPaths)
         // Gets Ingredients & Measurements Data
         var index = 1
         for ingredientPath in ingredientsIndexPaths {

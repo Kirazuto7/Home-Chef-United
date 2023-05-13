@@ -18,7 +18,7 @@ protocol RecipeCollectionViewCellDelegate: class {
 class CookbookTableViewCell: UITableViewCell {
     
     @IBOutlet weak var recipesCollectionView: UICollectionView!
-    var recipeCells: [FavoriteRecipe]?
+    var recipeCells: [FavoriteRecipe] = [FavoriteRecipe]()
     var section: Int?
     var sectionName: String?
     weak var cellDelegate: RecipeCollectionViewCellDelegate?
@@ -61,7 +61,7 @@ extension CookbookTableViewCell: UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.recipeCells?.count ?? 0
+        return self.recipeCells.count
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -70,10 +70,12 @@ extension CookbookTableViewCell: UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecipeCollectionCell", for: indexPath) as? RecipeCollectionViewCell {
-            if let recipeArray = self.recipeCells {
+            /*if let recipeArray = self.recipeCells = {
                 cell.configure(for: recipeArray[indexPath.item])
                 return cell
-            }
+            }*/
+            cell.configure(for: self.recipeCells[indexPath.item])
+            return cell
         }
         return UICollectionViewCell()
     }

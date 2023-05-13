@@ -9,11 +9,13 @@ import UIKit
 import FirebaseCore
 import FirebaseFirestore
 import FirebaseAuth
+import FirebaseStorage
 import CoreData
 
 class ProfileViewController: UIViewController {
 
     
+    @IBOutlet weak var profilePhotoImageView: UIImageView!
     @IBOutlet weak var signoutButton: UIBarButtonItem!
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var nameTextField: UITextField!
@@ -23,10 +25,10 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var recipeImageView: UIImageView!
     @IBOutlet weak var recipeDateSavedLabel: UILabel!
     @IBOutlet weak var passwordLabel: UILabel!
-    
     @IBOutlet weak var mostRecentRecipePlaceholderLabel: UILabel!
     @IBOutlet var passwordTapGestureRecognizer: UITapGestureRecognizer!
     @IBOutlet weak var saveButton: UIButton!
+
     
     let defaults = UserDefaults.standard // Use to retrieve most recently saved recipe data
     var managedObjectContext: NSManagedObjectContext!
@@ -36,11 +38,16 @@ class ProfileViewController: UIViewController {
     
     var user: User? = Auth.auth().currentUser
     var gradient: CAGradientLayer?
+    var profileImage: UIImage? // Used to keep the current image of the profile photo incase the user does not save or cancels
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         nameTextField.delegate = self
         emailTextField.delegate = self
         setupProfileView()
+        let profilePhotoTapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(profilePhotoImageTapped(gestureRecognizer:)))
+        profilePhotoTapGesture.numberOfTapsRequired = 1
+        profilePhotoImageView.addGestureRecognizer(profilePhotoTapGesture)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -61,6 +68,18 @@ class ProfileViewController: UIViewController {
         }
         else {
             mostRecentRecipePlaceholderLabel.isHidden = true
+        }
+        
+        let storageRef = Storage.storage().reference()
+        let profilePhotoRef = storageRef.child("\(user!.uid)/profilePhoto.jpg")
+        
+        profilePhotoRef.downloadURL { url, error in
+            if let error = error {
+                print("Error: \(error)")
+            }
+            else {
+                self.profilePhotoImageView.downloadImage(url: url!)
+            }
         }
     }
   
@@ -88,6 +107,15 @@ class ProfileViewController: UIViewController {
         
         nameTextField.text = user?.displayName
         emailTextField.text = user?.email
+      
+        profilePhotoImageView.layer.cornerRadius =  profilePhotoImageView.layer.bounds.size.width / 2
+        profilePhotoImageView.layer.borderWidth = 1
+        
+        profilePhotoImageView.isUserInteractionEnabled = false
+        
+        if profileImage != nil {
+            profilePhotoImageView.image = profileImage
+        }
     }
     
     func setupEditView() {
@@ -118,6 +146,9 @@ class ProfileViewController: UIViewController {
         
         nameTextField.text = user?.displayName
         emailTextField.text = user?.email
+        
+        profilePhotoImageView.isUserInteractionEnabled = true
+        profileImage = profilePhotoImageView.image
     }
     
     func signoutUser() {
@@ -138,6 +169,10 @@ class ProfileViewController: UIViewController {
         loginController.managedObjectContext = managedObjectContext
         loginController.window = window
         loginController.db = db
+    }
+    
+    @objc func profilePhotoImageTapped(gestureRecognizer: UITapGestureRecognizer) {
+        pickPhoto()
     }
     
     // MARK: - IBOutlet Actions
@@ -170,11 +205,28 @@ class ProfileViewController: UIViewController {
         let errorAlert = UIAlertController(title: "Error", message: "There was an error saving your changes", preferredStyle: .alert)
         let changeRequest = user?.createProfileChangeRequest()
         
+        
         if nameTextField.text != user?.displayName {
             changeRequest?.displayName = nameTextField.text!
             changeRequest?.commitChanges(completion: { error in
                 if error != nil {
                     presentAlert(errorAlert, for: self)
+                }
+                else {
+                    self.db.collection("users").document(self.user!.uid).updateData([
+                        "username": self.nameTextField.text!
+                    ]) { error in
+                        if error != nil {
+                            presentAlert(errorAlert, for: self)
+                        }
+                        else {
+                            let saveAlert = UIAlertController(title: "Changes Saved", message: "Your changes have been saved successfully!", preferredStyle: .alert)
+                                presentAlert(saveAlert, for: self)
+                                self.editMode = false
+                                self.setupProfileView()
+                            print("Document successfully created")
+                        }
+                    }
                 }
             })
         }
@@ -184,6 +236,23 @@ class ProfileViewController: UIViewController {
                 if error != nil {
                     presentAlert(errorAlert, for: self)
                 }
+                else {
+                    
+                    self.db.collection("users").document(self.user!.uid).updateData([
+                        "password": self.passwordLabel.text!
+                    ]) { error in
+                        if error != nil {
+                            presentAlert(errorAlert, for: self)
+                        }
+                        else {
+                            let saveAlert = UIAlertController(title: "Changes Saved", message: "Your changes have been saved successfully!", preferredStyle: .alert)
+                            presentAlert(saveAlert, for: self)
+                            self.editMode = false
+                            self.setupProfileView()
+                            print("Document successfully created")
+                        }
+                    }
+                }
             })
         }
         
@@ -192,8 +261,72 @@ class ProfileViewController: UIViewController {
                 if error != nil {
                     presentAlert(errorAlert, for: self)
                 }
+                else {
+                    
+                    self.db.collection("users").document(self.user!.uid).updateData([
+                        "email": self.emailTextField.text!
+                    ]) { error in
+                        if error != nil {
+                            presentAlert(errorAlert, for: self)
+                        }
+                        else {
+                            let saveAlert = UIAlertController(title: "Changes Saved", message: "Your changes have been saved successfully!", preferredStyle: .alert)
+                            presentAlert(saveAlert, for: self)
+                            self.editMode = false
+                            self.setupProfileView()
+                            print("Document successfully created")
+                        }
+                    }
+                }
             })
         }
+        
+        if profilePhotoImageView.image != profileImage {
+            profileImage = profilePhotoImageView.image
+            
+            let storageRef = Storage.storage().reference()
+            let profilePhotoRef = storageRef.child("\(user!.uid)/profilePhoto.jpg")
+            let userRef = db.collection("users").document(user!.uid)
+            if let data = profileImage?.jpegData(compressionQuality: 0.5) {
+                let uploadTask = profilePhotoRef.putData(data, metadata: nil) { (metadata, error) in
+                  
+                    if error != nil {
+                        presentAlert(errorAlert, for: self)
+                    }
+                    
+                  guard let metadata = metadata else {
+                    return
+                  }
+                  let size = metadata.size
+                  profilePhotoRef.downloadURL { (url, error) in
+                    guard let downloadURL = url else {
+                        
+                      return
+                    }
+                      userRef.updateData([
+                        "photoURL": downloadURL.absoluteString
+                      ]) { error in
+                          if let error = error {
+                              presentAlert(errorAlert, for: self)
+                          }
+                          else {
+                              let saveAlert = UIAlertController(title: "Changes Saved", message: "Your changes have been saved successfully!", preferredStyle: .alert)
+                              presentAlert(saveAlert, for: self)
+                              self.editMode = false
+                              self.setupProfileView()
+                          }
+                      }
+                  }
+                }
+            }
+        }// end of profilephoto condition
+        
+        // If the user presses save without changing anything go back to the profile view
+        let saveAlert = UIAlertController(title: "Changes Saved", message: "Your changes have been saved successfully!", preferredStyle: .alert)
+            presentAlert(saveAlert, for: self)
+            self.editMode = false
+            self.setupProfileView()
+
     }
     
     
@@ -288,4 +421,65 @@ class ProfileViewController: UIViewController {
     }
     */
 
+}
+
+extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func choosePhotoFromLibrary() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+        present(imagePicker, animated: true)
+    }
+    
+    func takePhotoWithCamera() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = .camera
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+        present(imagePicker, animated: true)
+    }
+    
+    func showPhotoMenu() {
+        // Slides in from the bottom providing choices
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        let actCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(actCancel)
+        
+        let actPhoto = UIAlertAction(title: "Take Photo", style: .default){ _ in
+            self.takePhotoWithCamera()
+        }
+        alert.addAction(actPhoto)
+        
+        let actLibrary = UIAlertAction(title: "Choose From Library", style: .default) { _ in
+            self.choosePhotoFromLibrary()
+        }
+        alert.addAction(actLibrary)
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func pickPhoto() {
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            showPhotoMenu()
+        }
+        else {
+            choosePhotoFromLibrary()
+        }
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
+            
+        if let profilePhoto = image {
+            profilePhotoImageView.image = profilePhoto
+        }
+        dismiss(animated: true)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
 }

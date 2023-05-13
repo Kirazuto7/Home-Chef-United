@@ -284,8 +284,9 @@ extension RecipeViewController: UISearchBarDelegate {
                     self.isLoading = false
                     self.spinner?.stopAnimating()
                     self.userRecipesArray = self.userRecipesArray.filter({ recipeDict in
-                        let name = recipeDict["name"] as! String
-                        return name.contains(searchBar.text!)
+                        var name = recipeDict["name"] as! String
+                        name = name.lowercased()
+                        return name.contains((searchBar.text!).lowercased())
                     })
                     if self.userRecipesArray.count > 0 {
                         self.hasSearched = false

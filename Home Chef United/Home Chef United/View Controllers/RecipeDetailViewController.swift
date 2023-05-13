@@ -9,9 +9,12 @@ import UIKit
 import CoreData
 import FirebaseCore
 import FirebaseAuth
+import FirebaseStorage
 
 class RecipeDetailViewController: UITableViewController {
     
+    
+    @IBOutlet weak var authorPhotoImageView: UIImageView!
     @IBOutlet weak var recipeNameLabel: UILabel!
     @IBOutlet weak var recipeImageView: UIImageView!
     @IBOutlet weak var ingredientsStackView: UIStackView!
@@ -94,6 +97,7 @@ class RecipeDetailViewController: UITableViewController {
         if let userRecipe = userRecipe {
             let name = userRecipe["name"] as! String
             let author = userRecipe["author"] as! String
+            let authorID = userRecipe["authorID"] as! String
             let ingredients = userRecipe["ingredients"] as! [String]
             let measurements = userRecipe["measurements"] as? [String:Any]
             let instructions = userRecipe["instructions"] as! [String]
@@ -105,6 +109,21 @@ class RecipeDetailViewController: UITableViewController {
                 downloadTask = recipeImageView.downloadImage(url: url)
                 recipeImageView.layer.masksToBounds = true
                 recipeImageView.layer.cornerRadius = recipeImageView.frame.height / 10.0
+            }
+            
+            authorPhotoImageView.isHidden = false
+            let storageRef = Storage.storage().reference()
+            let profilePhotoRef = storageRef.child("\(authorID)/profilePhoto.jpg")
+            
+            profilePhotoRef.downloadURL { url, error in
+                if let error = error {
+                    print("Error: \(error)")
+                }
+                else {
+                    self.authorPhotoImageView.layer.cornerRadius =  self.authorPhotoImageView.layer.bounds.size.width / 2
+                    self.authorPhotoImageView.layer.borderWidth = 1
+                    self.authorPhotoImageView.downloadImage(url: url!)
+                }
             }
             
             var stepCounter = 1
@@ -199,6 +218,7 @@ class RecipeDetailViewController: UITableViewController {
             let favoriteRecipe = FavoriteRecipe(context: managedObjectContext)
             let name = userRecipe["name"] as! String
             let author = userRecipe["author"] as! String
+            let authorID = userRecipe["authorID"] as! String
             let ingredients = userRecipe["ingredients"] as! [String]
             let instructions = userRecipe["instructions"] as! [String]
             let urlString = userRecipe["imageURLString"] as! String
@@ -213,6 +233,7 @@ class RecipeDetailViewController: UITableViewController {
             favoriteRecipe.photoString = urlString
             favoriteRecipe.author = author
             favoriteRecipe.userID = user?.uid
+            favoriteRecipe.authorID = authorID
             
             if let measurements = userRecipe["measurements"] as? [String:String] {
                 favoriteRecipe.measurements = measurements

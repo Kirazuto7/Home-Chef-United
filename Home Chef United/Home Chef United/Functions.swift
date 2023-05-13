@@ -8,10 +8,14 @@
 import Foundation
 import UIKit
 
-// Group of Global Helper Functions
-
+// MARK: - Keys/Global Variables
+let MOST_RECENT_RECIPE_TITLE_KEY = "MOST_RECENT_RECIPE_TITLE"
+let MOST_RECENT_RECIPE_IMAGE_KEY = "MOST_RECENT_RECIPE_IMAGE"
+let MOST_RECENT_RECIPE_DATE_KEY = "MOST_RECENT_RECIPE_DATE"
 let appBackgroundColor = UIColor(red: 253/255, green: 179/255, blue: 130/255, alpha: 1)
-let appTextColor = UIColor.init(red: 233/255, green: 135/255, blue: 65/255, alpha: 1)
+let appTextColor = UIColor.black
+
+// MARK: - Group of Global Helper Functions
 
 // Finds the path to the app's document directory
 let applicationDocumentsDirectory: URL = {
@@ -42,12 +46,6 @@ func presentAlert(_ alert: UIAlertController, for viewController: UIViewControll
         alert.dismiss(animated: true)
     }
 }
-
-/*func fatalCoreDataError(_ error: Error) {
-    let dataSaveFailedNotification = Notification.Name("DataSaveFailedNotification")
-    print("*** Fatal Error: \(error)")
-    NotificationCenter.default.post(name: dataSaveFailedNotification, object: nil)
-}*/
 
 func performURLRequest(with url: URL) -> String? {
     do{
@@ -82,6 +80,52 @@ func taskErrorCheck(response: URLResponse?, error: Error?) -> Bool {
     
     return true
 }
+
+func setupBackgroundView(for view: UIView, with image: UIImage) {
+    let imageView = UIImageView(frame: view.bounds)
+    imageView.image = image
+    imageView.contentMode = .scaleToFill
+    imageView.clipsToBounds = true
+    imageView.center = view.center
+    view.addSubview(imageView)
+    view.sendSubviewToBack(imageView)
+}
+
+// SOURCE: - https://stackoverflow.com/questions/24380535/how-to-apply-gradient-to-background-view-of-ios-swift-app
+func setAppBackground(forView view: UIView) {
+    let gradient = CAGradientLayer()
+    let topColor = CGColor(red: 255/255, green: 126/255, blue: 95/255, alpha: 1)
+    let bottomColor = CGColor(red: 254/255, green: 180/255, blue: 123/255, alpha: 1)
+    gradient.frame = view.bounds
+    gradient.locations = [0.0, 1.0]
+    gradient.colors = [topColor, bottomColor]
+    view.layer.insertSublayer(gradient, at: 0)
+}
+
+// SOURCE: - https://stackoverflow.com/questions/3454356/uiimage-from-calayer-in-ios
+func gradientImage(fromLayer layer: CALayer) -> UIImage {
+    UIGraphicsBeginImageContext(layer.frame.size)
+    layer.render(in: UIGraphicsGetCurrentContext()!)
+    let image = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+    return image!
+}
+
+func addCancelToTextFields(forTextFields textFields: [UITextField]) {
+    
+    for textField in textFields {
+        let toolBar = UIToolbar()
+        toolBar.barStyle = UIBarStyle.default
+        toolBar.isTranslucent = true
+        toolBar.sizeToFit()
+        let cancel = UIBarButtonItem(systemItem: .cancel, primaryAction: UIAction(handler: { _ in
+            textField.resignFirstResponder()
+        }), menu: nil)
+        toolBar.setItems([cancel], animated: true)
+        textField.inputAccessoryView = toolBar
+    }
+}
+
 
 // MARK: - Helper Functions for Details regarding Recipes
 
@@ -165,49 +209,6 @@ func getRecipeInstructionSteps(for recipe: Recipe) -> [String] {
 func convertToYoutubeID(for recipe: Recipe) -> String {
     guard !recipe.youtubeURL!.isEmpty else { return "" }
     return recipe.youtubeURL?.components(separatedBy: "=")[1] ?? ""
-}
-
-func setupBackgroundView(for view: UIView, with image: UIImage) {
-    let imageView = UIImageView(frame: view.bounds)
-    imageView.image = image
-    imageView.contentMode = .scaleToFill
-    imageView.clipsToBounds = true
-    imageView.center = view.center
-    view.addSubview(imageView)
-    view.sendSubviewToBack(imageView)
-}
-
-func setAppBackground(forView view: UIView) {
-    let gradient = CAGradientLayer()
-    let topColor = CGColor(red: 255/255, green: 126/255, blue: 95/255, alpha: 1)
-    let bottomColor = CGColor(red: 254/255, green: 180/255, blue: 123/255, alpha: 1)
-    gradient.frame = view.bounds
-    gradient.locations = [0.0, 1.0]
-    gradient.colors = [topColor, bottomColor]
-    view.layer.insertSublayer(gradient, at: 0)
-}
-
-func gradientImage(fromLayer layer: CALayer) -> UIImage {
-    UIGraphicsBeginImageContext(layer.frame.size)
-    layer.render(in: UIGraphicsGetCurrentContext()!)
-    let image = UIGraphicsGetImageFromCurrentImageContext()
-    UIGraphicsEndImageContext()
-    return image!
-}
-
-func addCancelToTextFields(forTextFields textFields: [UITextField]) {
-    
-    for textField in textFields {
-        let toolBar = UIToolbar()
-        toolBar.barStyle = UIBarStyle.default
-        toolBar.isTranslucent = true
-        toolBar.sizeToFit()
-        let cancel = UIBarButtonItem(systemItem: .cancel, primaryAction: UIAction(handler: { _ in
-            textField.resignFirstResponder()
-        }), menu: nil)
-        toolBar.setItems([cancel], animated: true)
-        textField.inputAccessoryView = toolBar
-    }
 }
 
 

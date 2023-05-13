@@ -10,8 +10,6 @@ import UIKit
 extension UIViewController: UITextFieldDelegate {
         
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        //self.view.endEditing(true)
-        //return false
         textField.resignFirstResponder()
         return true
     }
@@ -21,7 +19,7 @@ extension UIViewController: UITextFieldDelegate {
     }
     
     // MARK: - Adjust view when Show/Hide Keyboard occurs
-    
+    // SOURCE: - https://stackoverflow.com/questions/26070242/move-view-with-keyboard-using-swift
     func addKeyboardNotificationCenter() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
 
