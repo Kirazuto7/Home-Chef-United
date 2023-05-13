@@ -240,7 +240,7 @@ extension CookbookViewController: RecipeCollectionViewCellDelegate {
     
     func recipeCollectionView(recipeCollectionView: RecipeCollectionViewCell?, index: Int, section: Int, tableViewCell: CookbookTableViewCell) {
         if !deleteMode && !editMode {
-            if let row = tableViewCell.recipeCells {
+            if let row = tableViewCell.recipeCells as? [FavoriteRecipe] {
                 let recipe = row[index]
                 performSegue(withIdentifier: "CookbookPagesSegue", sender: recipe)
             }
@@ -249,7 +249,7 @@ extension CookbookViewController: RecipeCollectionViewCellDelegate {
     
     func removeRecipeFromCollectionView(recipeCollectionView: RecipeCollectionViewCell?, index: Int, section: Int, tableViewCell: CookbookTableViewCell) {
         if deleteMode {
-            if let row = tableViewCell.recipeCells {
+            if let row = tableViewCell.recipeCells as? [FavoriteRecipe]{
                 let recipe = row[index]
                 
                 let alert = UIAlertController(title: "DELETE \(recipe.title)", message: "Are you sure?", preferredStyle: .alert)
@@ -266,7 +266,7 @@ extension CookbookViewController: RecipeCollectionViewCellDelegate {
     
     func editRecipeFromCollectionView(recipeCollectionView: RecipeCollectionViewCell?, index: Int, section: Int, sectionName: String, tableViewCell: CookbookTableViewCell) {
         if editMode && sectionName == "My Recipes" {
-            if let row = tableViewCell.recipeCells {
+            if let row = tableViewCell.recipeCells as? [FavoriteRecipe] {
                 let recipe = row[index]
                 performSegue(withIdentifier: "EditRecipeSegue", sender: recipe)
             }
@@ -318,10 +318,10 @@ extension CookbookViewController: NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         switch type {
         case .insert:
-            print("Insert Section")
+            print("Insert Section:", sectionIndex)
             tableView.insertSections(IndexSet(integer: sectionIndex), with: .fade)
         case .delete:
-            print("Delete Section")
+            print("Delete Section:", sectionIndex)
             tableView.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
         case .update:
             print("Update Section")
@@ -334,6 +334,7 @@ extension CookbookViewController: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("Content Change Complete")
+        //tableView.endUpdates()
         tableView.reloadData()
     }
 }

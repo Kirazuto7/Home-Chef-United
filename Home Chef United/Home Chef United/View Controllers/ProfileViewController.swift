@@ -28,6 +28,7 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var mostRecentRecipePlaceholderLabel: UILabel!
     @IBOutlet var passwordTapGestureRecognizer: UITapGestureRecognizer!
     @IBOutlet weak var saveButton: UIButton!
+
     
     let defaults = UserDefaults.standard // Use to retrieve most recently saved recipe data
     var managedObjectContext: NSManagedObjectContext!
@@ -204,6 +205,7 @@ class ProfileViewController: UIViewController {
         let errorAlert = UIAlertController(title: "Error", message: "There was an error saving your changes", preferredStyle: .alert)
         let changeRequest = user?.createProfileChangeRequest()
         
+        
         if nameTextField.text != user?.displayName {
             changeRequest?.displayName = nameTextField.text!
             changeRequest?.commitChanges(completion: { error in
@@ -317,7 +319,14 @@ class ProfileViewController: UIViewController {
                   }
                 }
             }
-        }
+        }// end of profilephoto condition
+        
+        // If the user presses save without changing anything go back to the profile view
+        let saveAlert = UIAlertController(title: "Changes Saved", message: "Your changes have been saved successfully!", preferredStyle: .alert)
+            presentAlert(saveAlert, for: self)
+            self.editMode = false
+            self.setupProfileView()
+
     }
     
     

@@ -29,6 +29,7 @@ extension FavoriteRecipe {
     @NSManaged public var photoID: NSNumber?
     @NSManaged public var photoString: String?
     @NSManaged public var author: String?
+    @NSManaged public var authorID: String?
 }
 
 extension FavoriteRecipe : Identifiable {

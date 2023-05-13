@@ -6,8 +6,12 @@
 //
 
 import UIKit
+import FirebaseCore
+import FirebaseStorage
 
 class UserRecipeCell : UITableViewCell {
+    
+    @IBOutlet weak var authorPhotoImageView: UIImageView!
     @IBOutlet weak var recipeNameLabel: UILabel!
     @IBOutlet weak var recipeImageView: UIImageView!
     @IBOutlet weak var timeLabel: UILabel!
@@ -19,6 +23,7 @@ class UserRecipeCell : UITableViewCell {
     func configure(for recipe: [String:Any]) {
         let name = recipe["name"] as! String
         let author = recipe["author"] as! String
+        let authorID = recipe["authorID"] as! String
         let ingredients = recipe["ingredients"] as! [String]
         let urlString = recipe["imageURLString"] as! String
         
@@ -36,6 +41,21 @@ class UserRecipeCell : UITableViewCell {
             downloadTask = recipeImageView.downloadImage(url: url)
         }
         recipeImageView.layer.cornerRadius = 10
+        
+        let storageRef = Storage.storage().reference()
+        let profilePhotoRef = storageRef.child("\(authorID)/profilePhoto.jpg")
+        
+        profilePhotoRef.downloadURL { url, error in
+            if let error = error {
+                print("Error: \(error)")
+            }
+            else {
+                self.authorPhotoImageView.layer.cornerRadius =  self.authorPhotoImageView.layer.bounds.size.width / 2
+                self.authorPhotoImageView.layer.borderWidth = 1
+                self.authorPhotoImageView.downloadImage(url: url!)
+            }
+        }
+        
         cellView.clipsToBounds = true
         setAppBackground(forView: cellView)
         cellView.layer.cornerRadius = 10

@@ -8,6 +8,7 @@
 import UIKit
 import AudioToolbox
 
+// SOURCE: - https://www.hackingwithswift.com/articles/117/the-ultimate-guide-to-timer
 class TimerHeaderView: UIView {
     
     lazy var timerImageView: UIImageView = {
@@ -212,7 +213,8 @@ class TimerHeaderView: UIView {
     }
     
     func runTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+        timer = Timer(timeInterval: 1, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+        RunLoop.current.add(timer, forMode: .common)
     }
     
     // Called every second and will update the totalTime as well as text field label
@@ -229,6 +231,7 @@ class TimerHeaderView: UIView {
             timerTextField.textColor = .red
         }
         
+        // SOURCE: - https://stackoverflow.com/questions/26455880/how-to-make-iphone-vibrate-using-swift
         // Reset when timer is up
         if totalTime == 0 {
             timerImageView.shakeAnimation(durationOf: 0.07, repeatNumTimes: 20)
