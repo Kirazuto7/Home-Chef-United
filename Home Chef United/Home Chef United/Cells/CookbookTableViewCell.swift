@@ -10,9 +10,9 @@ import FirebaseCore
 import FirebaseAuth
 
 protocol RecipeCollectionViewCellDelegate: class {
-    func recipeCollectionView(recipeCollectionView: RecipeCollectionViewCell?, index: Int, section: Int, tableViewCell: CookbookTableViewCell)
-    func removeRecipeFromCollectionView(recipeCollectionView: RecipeCollectionViewCell?, index: Int, section: Int, tableViewCell: CookbookTableViewCell)
-    func editRecipeFromCollectionView(recipeCollectionView: RecipeCollectionViewCell?, index: Int, section: Int, sectionName: String, tableViewCell: CookbookTableViewCell)
+    func recipeCollectionView(recipeCollectionView: RecipeCollectionViewCell?, index: Int, section: Int, indexPath: IndexPath, tableViewCell: CookbookTableViewCell)
+    func removeRecipeFromCollectionView(recipeCollectionView: RecipeCollectionViewCell?, index: Int, section: Int, indexPath: IndexPath, tableViewCell: CookbookTableViewCell)
+    func editRecipeFromCollectionView(recipeCollectionView: RecipeCollectionViewCell?, index: Int, section: Int, indexPath: IndexPath, sectionName: String, tableViewCell: CookbookTableViewCell)
 }
 
 class CookbookTableViewCell: UITableViewCell {
@@ -86,9 +86,9 @@ extension CookbookTableViewCell: UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as? RecipeCollectionViewCell
-        self.cellDelegate?.recipeCollectionView(recipeCollectionView: cell, index: indexPath.item, section: section!, tableViewCell: self)
-        self.cellDelegate?.removeRecipeFromCollectionView(recipeCollectionView: cell, index: indexPath.item, section: section!, tableViewCell: self)
-        self.cellDelegate?.editRecipeFromCollectionView(recipeCollectionView: cell, index: indexPath.item, section: section!, sectionName: sectionName!, tableViewCell: self)
+        self.cellDelegate?.recipeCollectionView(recipeCollectionView: cell, index: indexPath.item, section: section!, indexPath: indexPath, tableViewCell: self)
+        self.cellDelegate?.removeRecipeFromCollectionView(recipeCollectionView: cell, index: indexPath.item, section: section!, indexPath: indexPath, tableViewCell: self)
+        self.cellDelegate?.editRecipeFromCollectionView(recipeCollectionView: cell, index: indexPath.item, section: section!, indexPath: indexPath, sectionName: sectionName!, tableViewCell: self)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

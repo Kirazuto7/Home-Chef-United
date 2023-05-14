@@ -20,6 +20,7 @@ class CookbookViewController: UITableViewController {
     var managedObjectContext: NSManagedObjectContext!
     var db: Firestore!
     let user = Auth.auth().currentUser
+    var recipeCellIndexPath: IndexPath?
     
     lazy var editButton: UIButton =  {
         let editButton = UIButton()
@@ -238,7 +239,7 @@ class CookbookViewController: UITableViewController {
 
 extension CookbookViewController: RecipeCollectionViewCellDelegate {
     
-    func recipeCollectionView(recipeCollectionView: RecipeCollectionViewCell?, index: Int, section: Int, tableViewCell: CookbookTableViewCell) {
+    func recipeCollectionView(recipeCollectionView: RecipeCollectionViewCell?, index: Int, section: Int, indexPath: IndexPath, tableViewCell: CookbookTableViewCell) {
         if !deleteMode && !editMode {
             if let row = tableViewCell.recipeCells as? [FavoriteRecipe] {
                 let recipe = row[index]
@@ -247,11 +248,11 @@ extension CookbookViewController: RecipeCollectionViewCellDelegate {
         }
     }
     
-    func removeRecipeFromCollectionView(recipeCollectionView: RecipeCollectionViewCell?, index: Int, section: Int, tableViewCell: CookbookTableViewCell) {
+    func removeRecipeFromCollectionView(recipeCollectionView: RecipeCollectionViewCell?, index: Int, section: Int, indexPath: IndexPath, tableViewCell: CookbookTableViewCell) {
         if deleteMode {
             if let row = tableViewCell.recipeCells as? [FavoriteRecipe]{
                 let recipe = row[index]
-                
+                recipeCellIndexPath = indexPath
                 let alert = UIAlertController(title: "DELETE \(recipe.title)", message: "Are you sure?", preferredStyle: .alert)
                 let cancel = UIAlertAction(title: "Cancel", style: .cancel)
                 let delete = UIAlertAction(title: "Delete", style: .destructive) { _ in
@@ -264,7 +265,7 @@ extension CookbookViewController: RecipeCollectionViewCellDelegate {
         }
     }
     
-    func editRecipeFromCollectionView(recipeCollectionView: RecipeCollectionViewCell?, index: Int, section: Int, sectionName: String, tableViewCell: CookbookTableViewCell) {
+    func editRecipeFromCollectionView(recipeCollectionView: RecipeCollectionViewCell?, index: Int, section: Int, indexPath: IndexPath, sectionName: String, tableViewCell: CookbookTableViewCell) {
         if editMode && sectionName == "My Recipes" {
             if let row = tableViewCell.recipeCells as? [FavoriteRecipe] {
                 let recipe = row[index]
@@ -289,20 +290,21 @@ extension CookbookViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("Content Will Update!")
-        //tableView.beginUpdates()
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case.insert:
             print("INSERT OBJECT")
-            if let cell = tableView.cellForRow(at: newIndexPath!) as? CookbookTableViewCell {
-                cell.recipesCollectionView.insertItems(at: [newIndexPath!])
+            if let newIndexPath = newIndexPath, let cell = tableView.cellForRow(at: newIndexPath) as? CookbookTableViewCell {
+                cell.recipesCollectionView.insertItems(at: [newIndexPath])
             }
         case .delete:
             print("Deleted object!")
-            if let cell = tableView.cellForRow(at: indexPath!) as? CookbookTableViewCell {
-                cell.recipesCollectionView.deleteItems(at: [indexPath!])
+            if let indexPath = indexPath, let cell = tableView.cellForRow(at: indexPath) as? CookbookTableViewCell {
+                if let indexPathToDelete = recipeCellIndexPath {
+                    cell.recipesCollectionView.deleteItems(at: [indexPathToDelete])
+                }
             }
         case .update:
             print("UPDATE OBJECT")
@@ -334,7 +336,6 @@ extension CookbookViewController: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("Content Change Complete")
-        //tableView.endUpdates()
         tableView.reloadData()
     }
 }
